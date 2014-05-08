@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>76F59441-4A35-4634-9E26-459F3D4B7A40</string>
+	<key>IDESourceControlProjectName</key>
+	<string>TableDemo</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>BFE26172-AA05-4A58-8BC3-0A294D7F9A0B</key>
+		<string>ssh://ghe.amb.ca.local/pecolly/pecolly-iPhone.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>pecolly/Native/TableDemo/TableDemo.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>BFE26172-AA05-4A58-8BC3-0A294D7F9A0B</key>
+		<string>../../../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>ssh://ghe.amb.ca.local/pecolly/pecolly-iPhone.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>BFE26172-AA05-4A58-8BC3-0A294D7F9A0B</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>BFE26172-AA05-4A58-8BC3-0A294D7F9A0B</string>
+			<key>IDESourceControlWCCName</key>
+			<string>pecolly-iPhone</string>
+		</dict>
+	</array>
+</dict>
+</plist>
