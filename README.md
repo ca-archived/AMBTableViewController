@@ -66,6 +66,27 @@ authorSelfSection = [PETableViewSection
                       }];
 authorSelfSection.hidden = YES;
 
+authorOtherSection = [PETableViewSection
+                       sectionWithObjects:@[[PECellIdentifier identifierFromString:@"PEPhotosDetailAuthorCell"],
+                                            [PECellIdentifier identifierFromString:@"Mane"]]
+                       cellIdentifierBlock:NULL
+                       rowHeightBlock:NULL
+                       configurationBlock:^(id object,
+                                            UITableViewCell * cell,
+                                            NSIndexPath * indexPath)
+                       {
+                           switch (indexPath.row)
+                           {
+                               case 0:
+                               {
+                                   PEPhotosDetailAuthorCell * authorCell = (PEPhotosDetailAuthorCell *)cell;
+                                   authorCell.authorLabel.text = @"Other author";
+                                   break;
+                               }
+                           }
+                       }];
+authorOtherSection.hidden = YES;
+
 commentsSection = [PETableViewSection
                     sectionWithObjects:nil // Start empty
                     cellIdentifierBlock:^NSString *(id object,
@@ -115,6 +136,19 @@ tableViewController.sections = @[topSection,
 ### Updating Contents Later
 
 ```obj-c
+
+- (void)setPost:(id)post
+{
+    _post = post;
+    
+    self.authorSelfSection.hidden = !post.isOwnPost;
+    self.authorOtherSection.hidden = post.isOwnPost;
+    
+    [self.tableView reloadData];
+    
+    [self reloadComments:self];
+}
+
 - (IBAction)reloadComments:(id)sender
 {
     // Simulate async message loading
