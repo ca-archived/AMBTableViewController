@@ -26,6 +26,15 @@
 
 @dynamic sections;
 
+- (NSString *)description
+{
+    return [[[[[NSString stringWithFormat:@"<%@: %p sections: %@>", NSStringFromClass(self.class), self, self.sections]
+               stringByReplacingOccurrencesOfString:@"\\n" withString:@"\n"]
+              stringByReplacingOccurrencesOfString:@"    \\" withString:@"      "]
+             stringByReplacingOccurrencesOfString:@">\\\"" withString:@">\""]
+            stringByReplacingOccurrencesOfString:@"\n)>\"" withString:@"\n    )>\""];
+}
+
 #pragma mark - Managing sections
 
 - (void)setSections:(NSArray *)sections
@@ -208,6 +217,17 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath
     
 }
 
+- (NSString *)description
+{
+    return [NSString stringWithFormat:@"<%@: %p%@%@ numberOfRows: %@%@ objects: %@>",
+            NSStringFromClass(self.class), self,
+            self.controller ? [NSString stringWithFormat:@" index : %@", @([self.controller.sections indexOfObject:self])] : @"",
+            self.hidden ? @" hidden: YES" : @"",
+            @(self.numberOfRows),
+            self.presentsNoContentsCell ? @" presentsNoContentsCell: YES" : @"",
+            self.objects];
+}
+
 #pragma mark - Managing objects
 
 - (void)setObjects:(NSArray *)objects
@@ -325,6 +345,11 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath
     PECellIdentifier * identifier = [PECellIdentifier new];
     identifier.string = string;
     return identifier;
+}
+
+- (NSString *)description
+{
+    return [NSString stringWithFormat:@"<%@: %@>", NSStringFromClass([self class]), self.string];
 }
 
 @end
