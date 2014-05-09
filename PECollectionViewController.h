@@ -10,12 +10,6 @@
 
 @interface PECollectionViewController : UICollectionViewController
 
-+ (instancetype)controller;
-
-+ (NSString *)storyboardName;
-+ (NSString *)storyboardIdentifier;
-+ (UIStoryboard *)storyboard;
-
 /// @name Managing Sections
 
 @property (strong, nonatomic) NSArray * sections;

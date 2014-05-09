@@ -10,8 +10,6 @@
 
 @interface PEPhotosDetailViewController : PETableViewController
 
-+ (instancetype)controllerForPost:(id)post;
-
 @property (strong, nonatomic) id post;
 
 @property (strong, nonatomic) PETableViewSection * topSection;

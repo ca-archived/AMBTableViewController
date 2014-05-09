@@ -26,32 +26,6 @@
 
 @dynamic sections;
 
-+ (NSString *)storyboardName
-{
-    return NSStringFromClass(self);
-}
-
-+ (NSString *)storyboardIdentifier
-{
-    return NSStringFromClass(self);
-}
-
-+ (UIStoryboard *)storyboard
-{
-    return [UIStoryboard storyboardWithName:self.storyboardName
-                                     bundle:nil];
-}
-
-- (UIStoryboard *)storyboard
-{
-    return super.storyboard ?: [self class].storyboard;
-}
-
-+ (instancetype)controller
-{
-    return [self.storyboard instantiateViewControllerWithIdentifier:self.storyboardIdentifier];
-}
-
 #pragma mark - Managing sections
 
 - (void)setSections:(NSArray *)sections

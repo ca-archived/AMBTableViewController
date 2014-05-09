@@ -22,6 +22,8 @@
 		E53CAEBA191B6D9800964FBC /* PEPhotosDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E53CAEB6191B6D9800964FBC /* PEPhotosDetailViewController.m */; };
 		E53CAEBB191B6D9800964FBC /* PETableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E53CAEB8191B6D9800964FBC /* PETableViewController.m */; };
 		E53CAEBC191B6D9800964FBC /* PhotosDetail.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E53CAEB9191B6D9800964FBC /* PhotosDetail.storyboard */; };
+		E553BFA5191B9203004A673B /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E553BFA4191B9203004A673B /* Settings.bundle */; };
+		E56F5B8A191CB7F6000E7B81 /* PECollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E56F5B89191CB7F6000E7B81 /* PECollectionViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,6 +58,9 @@
 		E53CAEB7191B6D9800964FBC /* PETableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PETableViewController.h; path = ../../PETableViewController.h; sourceTree = "<group>"; };
 		E53CAEB8191B6D9800964FBC /* PETableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PETableViewController.m; path = ../../PETableViewController.m; sourceTree = "<group>"; };
 		E53CAEB9191B6D9800964FBC /* PhotosDetail.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = PhotosDetail.storyboard; path = ../PhotosDetail.storyboard; sourceTree = "<group>"; };
+		E553BFA4191B9203004A673B /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
+		E56F5B88191CB7F6000E7B81 /* PECollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PECollectionViewController.h; path = ../../PECollectionViewController.h; sourceTree = "<group>"; };
+		E56F5B89191CB7F6000E7B81 /* PECollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PECollectionViewController.m; path = ../../PECollectionViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,6 +90,7 @@
 		E53CAE74191B6D4F00964FBC = {
 			isa = PBXGroup;
 			children = (
+				E553BFA4191B9203004A673B /* Settings.bundle */,
 				E53CAE86191B6D5000964FBC /* TableDemo */,
 				E553BFA1191B6EF7004A673B /* PETableViewController */,
 				E53CAEA5191B6D5000964FBC /* TableDemoTests */,
@@ -161,6 +167,8 @@
 			children = (
 				E53CAEB7191B6D9800964FBC /* PETableViewController.h */,
 				E53CAEB8191B6D9800964FBC /* PETableViewController.m */,
+				E56F5B88191CB7F6000E7B81 /* PECollectionViewController.h */,
+				E56F5B89191CB7F6000E7B81 /* PECollectionViewController.m */,
 			);
 			name = PETableViewController;
 			path = TableDemo;
@@ -243,6 +251,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E553BFA5191B9203004A673B /* Settings.bundle in Resources */,
 				E53CAEBC191B6D9800964FBC /* PhotosDetail.storyboard in Resources */,
 				E53CAE99191B6D5000964FBC /* Images.xcassets in Resources */,
 				E53CAE8B191B6D5000964FBC /* InfoPlist.strings in Resources */,
@@ -268,6 +277,7 @@
 				E53CAE8D191B6D5000964FBC /* main.m in Sources */,
 				E53CAEBB191B6D9800964FBC /* PETableViewController.m in Sources */,
 				E53CAE91191B6D5000964FBC /* PEAppDelegate.m in Sources */,
+				E56F5B8A191CB7F6000E7B81 /* PECollectionViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

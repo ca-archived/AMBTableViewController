@@ -15,13 +15,6 @@
     return @"PhotosDetail";
 }
 
-+ (instancetype)controllerForPost:(id)post
-{
-    PEPhotosDetailViewController * controller = [self controller];
-    controller.post = post;
-    return controller;
-}
-
 - (void)awakeFromNib
 {
     [super awakeFromNib];
