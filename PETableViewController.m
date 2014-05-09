@@ -187,7 +187,7 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath
 @end
 
 
-@implementation PETableViewSectionO
+@implementation PETableViewSection
 {
     NSMutableArray * _mutableObjects;
 }
