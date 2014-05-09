@@ -1,7 +1,7 @@
 iOS-PETableViewController
 =========================
 
-Storyboard-centric block-based UITableViewController that simplifies sections and contents management 
+Storyboard-centric block-based controller that simplifies management and sync of UITableView and its dataSource
 
 ## Features
 
