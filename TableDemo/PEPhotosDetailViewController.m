@@ -109,7 +109,7 @@
                                case 0:
                                    return 40.0;
                                case 1:
-                                   return 320.0;
+                                   return 160.0;
                                default:
                                    return -1.0; // Table view's default height
                            }
