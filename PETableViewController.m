@@ -28,7 +28,7 @@
 
 - (NSString *)description
 {
-    return [[[[[NSString stringWithFormat:@"<%@: %p sections: %@>", NSStringFromClass(self.class), self, self.sections]
+    return [[[[[NSString stringWithFormat:@"<%@: %p; sections: %@>", NSStringFromClass(self.class), self, self.sections]
                stringByReplacingOccurrencesOfString:@"\\n" withString:@"\n"]
               stringByReplacingOccurrencesOfString:@"    \\" withString:@"      "]
              stringByReplacingOccurrencesOfString:@">\\\"" withString:@">\""]
@@ -107,6 +107,25 @@
                   withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
+- (NSIndexPath *)indexPathForRowWithSubview:(UIView *)subview
+{
+    CGPoint point = [self.tableView convertPoint:subview.center
+                                        fromView:subview.superview];
+    return [self.tableView indexPathForRowAtPoint:point];
+}
+
+#pragma mark - Combining changes
+
+- (void)combineChanges:(void (^)(void))changes
+{
+    if (self.tableView)
+    {
+        [self.tableView beginUpdates];
+        changes();
+        [self.tableView endUpdates];
+    }
+}
+
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -118,7 +137,8 @@
  numberOfRowsInSection:(NSInteger)sectionIndex
 {
     PETableViewSection * section = self.sections[sectionIndex];
-    return section.numberOfRows;
+    NSUInteger numberOfRows = section.numberOfRows;
+    return numberOfRows;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView
@@ -126,7 +146,7 @@
 {
     // Retrieve the cell identifier
     PETableViewSection * section = self.sections[indexPath.section];
-    id object = section.objects.count ? section.objects[indexPath.row] : nil;
+    id object = section.objects.count ? section.visibleObjects[indexPath.row] : nil;
     NSString * cellIdentifier;
     if (section.cellIdentifierBlock)
     {
@@ -141,6 +161,7 @@
     
     // Dequeue a cell
     UITableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    NSAssert(cell, @"No cell could be dequeued with the given identifier.");
     
     // Configure the cell
     if (section.configurationBlock)
@@ -157,7 +178,7 @@
 heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     PETableViewSection * section = self.sections[indexPath.section];
-    id object = section.objects.count ? section.objects[indexPath.row] : nil;
+    id object = section.objects.count ? section.visibleObjects[indexPath.row] : nil;
     if (section.rowHeightBlock)
     {
         CGFloat height = section.rowHeightBlock(object,
@@ -173,9 +194,11 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath
 @implementation PETableViewSection
 {
     NSMutableArray * _mutableObjects;
+    NSMutableIndexSet * _hiddenObjectsMutableIndexSet;
 }
 
 @dynamic objects;
+@dynamic hiddenObjectsIndexSet;
 
 + (instancetype)sectionWithObjects:(NSArray *)objects
                cellIdentifierBlock:(PETableViewCellIdentifierBlock)cellIdentifierBlock
@@ -192,9 +215,10 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath
 
 - (NSUInteger)numberOfRows
 {
-    return (self.hidden ? 0 :                           // Hidden?
-            (self.objects.count ?:                      // Not empty?
-             (self.presentsNoContentsCell ? 1 : 0)));   // Empty but presents no contents cell?
+    return (self.hidden ? 0 :                                   // Hidden
+            (self.objects.count ? self.visibleObjects.count :   // Not empty
+             (self.presentsNoContentCell ? 1 :                  // Empty but presents a no content cell
+              0)));                                             // Empty and doesn't present a no content cell
 }
 
 - (PETableViewController *)controller
@@ -214,18 +238,19 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     _hidden = hidden;
     
-    
+    [self reloadSection];
 }
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"<%@: %p%@%@ numberOfRows: %@%@ objects: %@>",
+    return [NSString stringWithFormat:@"<%@: %p%@%@; numberOfRows: %@%@; objects (%@): %@%@>",
             NSStringFromClass(self.class), self,
-            self.controller ? [NSString stringWithFormat:@" index : %@", @([self.controller.sections indexOfObject:self])] : @"",
-            self.hidden ? @" hidden: YES" : @"",
+            self.controller ? [NSString stringWithFormat:@"; index: %@", @([self.controller.sections indexOfObject:self])] : @"",
+            self.hidden ? @"; hidden: YES" : @"",
             @(self.numberOfRows),
-            self.presentsNoContentsCell ? @" presentsNoContentsCell: YES" : @"",
-            self.objects];
+            self.presentsNoContentCell ? @"; presentsNoContentCell: YES" : @"",
+            @(self.objects.count), self.objects,
+            self.hiddenObjectsIndexSet.count ? [NSString stringWithFormat:@"; hiddenObjectsIndexSet: %@", self.hiddenObjectsIndexSet] : @""];
 }
 
 #pragma mark - Managing objects
@@ -233,19 +258,41 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath
 - (void)setObjects:(NSArray *)objects
 {
     _mutableObjects = [NSMutableArray arrayWithArray:objects];
+    _hiddenObjectsMutableIndexSet = [NSMutableIndexSet indexSet];
+    [self updateVisibleObjects];
     
     // Update table view
-    if (self.controller)
-    {
-        NSUInteger sectionIndex = [self.controller.sections indexOfObject:self];
-        [self.controller.tableView reloadSections:[NSIndexSet indexSetWithIndex:sectionIndex]
-                                 withRowAnimation:UITableViewRowAnimationAutomatic];
-    }
+    [self reloadSection];
 }
 
 - (NSArray *)objects
 {
     return _mutableObjects;
+}
+
+- (NSIndexSet *)hiddenObjectsIndexSet
+{
+    return _hiddenObjectsMutableIndexSet;
+}
+
+- (void)updateVisibleObjects
+{
+    NSMutableArray * visibleObjects = [NSMutableArray arrayWithArray:self.objects];
+    [visibleObjects removeObjectsAtIndexes:self.hiddenObjectsIndexSet];
+    _visibleObjects = visibleObjects;
+}
+
+- (void)addObject:(id)object
+{
+    [self insertObjects:@[object]
+              atIndexes:[NSIndexSet indexSetWithIndex:self.objects.count]];
+}
+
+- (void)addObjects:(NSArray *)objects
+{
+    [self insertObjects:objects
+              atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(self.objects.count,
+                                                                           objects.count)]];
 }
 
 - (void)insertObject:(id)object
@@ -269,22 +316,10 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath
     
     [_mutableObjects insertObjects:objects
                          atIndexes:indexSet];
+    [self updateVisibleObjects];
     
     // Update table view
-    if (self.controller)
-    {
-        NSMutableArray * indexPaths = [NSMutableArray array];
-        NSUInteger sectionIndex = [self.controller.sections indexOfObject:self];
-        for (NSUInteger index = indexSet.firstIndex;
-             index != NSNotFound;
-             index = [indexSet indexGreaterThanIndex:index])
-        {
-            [indexPaths addObject:[NSIndexPath indexPathForRow:index
-                                                     inSection:sectionIndex]];
-        }
-        [self.controller.tableView insertRowsAtIndexPaths:indexPaths
-                                         withRowAnimation:UITableViewRowAnimationAutomatic];
-    }
+    [self insertRowsWithIndexes:[self rowIndexSetForObjectIndexSet:indexSet]];
 }
 
 - (void)removeObject:(id)object
@@ -299,12 +334,7 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath
 
 - (void)removeObjects:(NSArray *)objects
 {
-    NSMutableIndexSet * indexSet = [NSMutableIndexSet indexSet];
-    for (id object in objects)
-    {
-        [indexSet addIndex:[self.objects indexOfObject:object]];
-    }
-    [self removeObjectsAtIndexes:indexSet];
+    [self removeObjectsAtIndexes:[self indexSetForObjects:objects]];
 }
 
 - (void)removeObjectsAtIndexes:(NSIndexSet *)indexSet
@@ -318,21 +348,151 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath
         return;
     }
     
+    [_hiddenObjectsMutableIndexSet removeIndexes:indexSet];
+    [self updateVisibleObjects];
+    
     // Update table view
+    [self deleteRowsWithIndexes:[self rowIndexSetForObjectIndexSet:indexSet]];
+}
+
+- (BOOL)isObjectHidden:(id)object
+{
+    return [self isObjectAtIndexHidden:[self.objects indexOfObject:object]];
+}
+
+- (BOOL)isObjectAtIndexHidden:(NSUInteger)index
+{
+    return [self.hiddenObjectsIndexSet containsIndex:index];
+}
+
+- (void)setObject:(id)object
+           hidden:(BOOL)hidden
+{
+    [self setObjectsAtIndexes:[NSIndexSet indexSetWithIndex:[self.objects indexOfObject:object]]
+                       hidden:hidden];
+}
+
+- (void)setObjectAtIndex:(NSUInteger)index
+                  hidden:(BOOL)hidden
+{
+    [self setObjectsAtIndexes:[NSIndexSet indexSetWithIndex:index]
+                       hidden:hidden];
+}
+
+- (void)setObjects:(NSArray *)objects
+            hidden:(BOOL)hidden
+{
+    [self setObjectsAtIndexes:[self indexSetForObjects:objects]
+                       hidden:hidden];
+}
+
+- (void)setObjectsAtIndexes:(NSIndexSet *)indexSet
+                     hidden:(BOOL)hidden
+{
+    if (hidden)
+    {
+        NSMutableIndexSet * newObjectIndexesToHide = [NSMutableIndexSet indexSet];
+        [newObjectIndexesToHide addIndexes:indexSet];
+        [newObjectIndexesToHide removeIndexes:self.hiddenObjectsIndexSet];
+        
+        if (newObjectIndexesToHide.count)
+        {
+            NSIndexSet * newRowIndexesToDelete = [self rowIndexSetForObjectIndexSet:newObjectIndexesToHide];
+            
+            [_hiddenObjectsMutableIndexSet addIndexes:newObjectIndexesToHide];
+            [self updateVisibleObjects];
+            
+            [self deleteRowsWithIndexes:newRowIndexesToDelete];
+        }
+    }
+    else
+    {
+        NSMutableIndexSet * newIndexesToShow = [NSMutableIndexSet indexSet];
+        for (NSUInteger index = indexSet.lastIndex;
+             index != NSNotFound;
+             index = [indexSet indexLessThanIndex:index])
+        {
+            if ([self.hiddenObjectsIndexSet containsIndex:index])
+                [newIndexesToShow addIndex:index];
+        }
+        
+        if (newIndexesToShow.count)
+        {
+            [_hiddenObjectsMutableIndexSet removeIndexes:newIndexesToShow];
+            [self updateVisibleObjects];
+            
+            NSIndexSet * newRowIndexesToInsert = [self rowIndexSetForObjectIndexSet:newIndexesToShow];
+            [self insertRowsWithIndexes:newRowIndexesToInsert];
+        }
+    }
+}
+
+#pragma mark - Internal Methods
+
+- (void)reloadSection
+{
     if (self.controller)
     {
-        NSMutableArray * indexPaths = [NSMutableArray array];
         NSUInteger sectionIndex = [self.controller.sections indexOfObject:self];
-        for (NSUInteger index = indexSet.firstIndex;
-             index != NSNotFound;
-             index = [indexSet indexGreaterThanIndex:index])
-        {
-            [indexPaths addObject:[NSIndexPath indexPathForRow:index
-                                                     inSection:sectionIndex]];
-        }
-        [self.controller.tableView deleteRowsAtIndexPaths:indexPaths
-                                         withRowAnimation:UITableViewRowAnimationAutomatic];
+        [self.controller.tableView reloadSections:[NSIndexSet indexSetWithIndex:sectionIndex]
+                                 withRowAnimation:UITableViewRowAnimationFade];
     }
+}
+
+- (void)insertRowsWithIndexes:(NSIndexSet *)rowIndexSet
+{
+    if (self.controller)
+    {
+        [self.controller.tableView insertRowsAtIndexPaths:[self indexPathsForRowIndexes:rowIndexSet]
+                                         withRowAnimation:UITableViewRowAnimationFade];
+    }
+}
+
+- (void)deleteRowsWithIndexes:(NSIndexSet *)rowIndexSet
+{
+    if (self.controller)
+    {
+        [self.controller.tableView deleteRowsAtIndexPaths:[self indexPathsForRowIndexes:rowIndexSet]
+                                         withRowAnimation:UITableViewRowAnimationFade];
+    }
+}
+
+- (NSIndexSet *)indexSetForObjects:(NSArray *)objects
+{
+    NSMutableIndexSet * indexSet = [NSMutableIndexSet indexSet];
+    for (id object in objects)
+    {
+        [indexSet addIndex:[self.objects indexOfObject:object]];
+    }
+    return indexSet;
+}
+
+- (NSIndexSet *)rowIndexSetForObjectIndexSet:(NSIndexSet *)indexSet
+{
+    NSMutableIndexSet * rowIndexSet = [NSMutableIndexSet indexSet];
+    NSUInteger countOfHiddenObjectsBelowIndex;
+    for (NSUInteger index = indexSet.firstIndex;
+         index != NSNotFound;
+         index = [indexSet indexGreaterThanIndex:index])
+    {
+        countOfHiddenObjectsBelowIndex = [self.hiddenObjectsIndexSet countOfIndexesInRange:NSMakeRange(0, index)];
+        [rowIndexSet addIndex:index - countOfHiddenObjectsBelowIndex];
+    }
+    return rowIndexSet;
+}
+
+- (NSArray *)indexPathsForRowIndexes:(NSIndexSet *)indexSet
+{
+    NSUInteger sectionIndex = [self.controller.sections indexOfObject:self];
+    NSMutableArray * indexPaths = [NSMutableArray array];
+    for (NSUInteger index = indexSet.firstIndex;
+         index != NSNotFound;
+         index = [indexSet indexGreaterThanIndex:index])
+    {
+        [indexPaths addObject:[NSIndexPath indexPathForRow:index
+                                                 inSection:sectionIndex]];
+    }
+    return indexPaths;
 }
 
 @end

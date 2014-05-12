@@ -26,6 +26,12 @@
 - (void)replaceSectionAtIndex:(NSUInteger)index
                   withSection:(PETableViewSection *)section;
 
+- (NSIndexPath *)indexPathForRowWithSubview:(UIView *)subview;
+
+/// @name Combining Multiple Section/Row Changes
+
+- (void)combineChanges:(void (^)(void))changes;
+
 @end
 
 
@@ -47,7 +53,7 @@ typedef void        (^PETableViewCellConfigurationBlock)(id object,
 /// @name Properties
 
 @property(nonatomic, getter=isHidden)   BOOL hidden;
-@property(nonatomic)                    BOOL presentsNoContentsCell;
+@property(nonatomic)                    BOOL presentsNoContentCell;
 
 @property (nonatomic, readonly)         NSUInteger numberOfRows;
 @property (copy, nonatomic, readonly)   PETableViewCellHeightBlock rowHeightBlock;
@@ -58,6 +64,11 @@ typedef void        (^PETableViewCellConfigurationBlock)(id object,
 /// @name Managing Objects
 
 @property (strong, nonatomic)           NSArray * objects;
+@property (strong, nonatomic, readonly) NSArray * visibleObjects;
+@property (strong, nonatomic, readonly) NSIndexSet * hiddenObjectsIndexSet;
+
+- (void)addObject:(id)object;
+- (void)addObjects:(NSArray *)objects;
 
 - (void)insertObject:(id)object
              atIndex:(NSUInteger)index;
@@ -69,6 +80,19 @@ typedef void        (^PETableViewCellConfigurationBlock)(id object,
 
 - (void)removeObjects:(NSArray *)objects;
 - (void)removeObjectsAtIndexes:(NSIndexSet *)indexSet;
+
+- (BOOL)isObjectHidden:(id)object;
+- (BOOL)isObjectAtIndexHidden:(NSUInteger)index;
+
+- (void)setObject:(id)object
+           hidden:(BOOL)hidden;
+- (void)setObjectAtIndex:(NSUInteger)index
+                  hidden:(BOOL)hidden;
+
+- (void)setObjects:(NSArray *)objects
+            hidden:(BOOL)hidden;
+- (void)setObjectsAtIndexes:(NSIndexSet *)indexSet
+                     hidden:(BOOL)hidden;
 
 @end
 
