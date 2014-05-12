@@ -14,8 +14,7 @@
 @property (strong, nonatomic) PEPost * post;
 
 @property (strong, nonatomic) PETableViewSection * topSection;
-@property (strong, nonatomic) PETableViewSection * authorSelfSection;
-@property (strong, nonatomic) PETableViewSection * authorOtherSection;
+@property (strong, nonatomic) PETableViewSection * authorSection;
 @property (strong, nonatomic) PETableViewSection * writeCommentSection;
 @property (strong, nonatomic) PETableViewSection * commentsSection;
 

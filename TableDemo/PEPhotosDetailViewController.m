@@ -11,18 +11,12 @@
 
 @implementation PEPhotosDetailViewController
 
-+ (NSString *)storyboardName
-{
-    return @"PhotosDetail";
-}
-
 - (void)awakeFromNib
 {
     [super awakeFromNib];
     
     self.sections = @[self.topSection,
-                      self.authorSelfSection,
-                      self.authorOtherSection,
+                      self.authorSection,
                       self.writeCommentSection,
                       self.commentsSection,
                       
@@ -45,8 +39,7 @@
     _post = post;
     
     BOOL ownPost = [post.authorName isEqualToString:@"Me"];
-    self.authorSelfSection.hidden = !ownPost;
-    self.authorOtherSection.hidden = ownPost;
+    self.authorSection.objects = @[[PECellIdentifier identifierFromString:ownPost ? @"author_self" : @"author_other"]];
     
     [self.tableView reloadData];
     
@@ -89,8 +82,7 @@
 
 - (IBAction)reloadComments:(id)sender
 {
-    id loadingCommentsObject = [PECellIdentifier identifierFromString:@"loading_comments"];
-    self.commentsSection.objects = @[loadingCommentsObject];
+    self.commentsSection.objects = @[[PECellIdentifier identifierFromString:@"loading_comments"]];
     
     // Simulate async message loading
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(),
@@ -212,53 +204,24 @@
     return _topSection;
 }
 
-- (PETableViewSection *)authorSelfSection
+- (PETableViewSection *)authorSection
 {
-    if (!_authorSelfSection)
+    if (!_authorSection)
     {
         __weak typeof(self) weakSelf = self;
-        _authorSelfSection = [PETableViewSection
-                              sectionWithObjects:@[[PECellIdentifier identifierFromString:@"author_self"]]
-                              cellIdentifierBlock:NULL
-                              rowHeightBlock:NULL
-                              configurationBlock:^(id object,
-                                                   UITableViewCell * cell,
-                                                   NSIndexPath * indexPath)
-                              {
-                                  PEPhotosDetailAuthorCell * authorCell = (PEPhotosDetailAuthorCell *)cell;
-                                  authorCell.authorLabel.text = weakSelf.post.authorName;
-                              }];
-        _authorSelfSection.hidden = YES;
+        _authorSection = [PETableViewSection
+                          sectionWithObjects:nil
+                          cellIdentifierBlock:NULL
+                          rowHeightBlock:NULL
+                          configurationBlock:^(id object,
+                                               UITableViewCell * cell,
+                                               NSIndexPath * indexPath)
+                          {
+                              PEPhotosDetailAuthorCell * authorCell = (PEPhotosDetailAuthorCell *)cell;
+                              authorCell.authorLabel.text = weakSelf.post.authorName;
+                          }];
     }
-    return _authorSelfSection;
-}
-
-- (PETableViewSection *)authorOtherSection
-{
-    if (!_authorOtherSection)
-    {
-        __weak typeof(self) weakSelf = self;
-        _authorOtherSection = [PETableViewSection
-                               sectionWithObjects:@[[PECellIdentifier identifierFromString:@"author_other"]]
-                               cellIdentifierBlock:NULL
-                               rowHeightBlock:NULL
-                               configurationBlock:^(id object,
-                                                    UITableViewCell * cell,
-                                                    NSIndexPath * indexPath)
-                               {
-                                   switch (indexPath.row)
-                                   {
-                                       case 0:
-                                       {
-                                           PEPhotosDetailAuthorCell * authorCell = (PEPhotosDetailAuthorCell *)cell;
-                                           authorCell.authorLabel.text = weakSelf.post.authorName;
-                                           break;
-                                       }
-                                   }
-                               }];
-        _authorOtherSection.hidden = YES;
-    }
-    return _authorOtherSection;
+    return _authorSection;
 }
 
 - (PETableViewSection *)writeCommentSection
