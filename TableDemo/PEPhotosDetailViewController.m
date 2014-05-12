@@ -7,6 +7,7 @@
 //
 
 #import "PEPhotosDetailViewController.h"
+#import "PEPost.h"
 
 @implementation PEPhotosDetailViewController
 
@@ -26,7 +27,7 @@
                       self.commentsSection,
                       
                       [PETableViewSection
-                       sectionWithObjects:@[[PECellIdentifier identifierFromString:@"Footer"]]
+                       sectionWithObjects:@[[PECellIdentifier identifierFromString:@"footer"]]
                        cellIdentifierBlock:NULL
                        rowHeightBlock:^CGFloat(id object,
                                                NSIndexPath * indexPath)
@@ -36,17 +37,16 @@
                        configurationBlock:NULL
                        ]];
     
-    self.post = @"Post";
+    [self goToNextPost:self];
 }
 
-- (void)setPost:(id)post
+- (void)setPost:(PEPost *)post
 {
     _post = post;
     
-    if (YES) // Own post
-    {
-        self.authorSelfSection.hidden = NO;
-    }
+    BOOL ownPost = [post.authorName isEqualToString:@"Me"];
+    self.authorSelfSection.hidden = !ownPost;
+    self.authorOtherSection.hidden = ownPost;
     
     [self.tableView reloadData];
     
@@ -55,18 +55,76 @@
 
 #pragma mark - Actions
 
-- (IBAction)tappedFollow:(id)sender
+- (IBAction)goToNextPost:(id)sender
+{
+    PEPost * nextPost = [PEPost new];
+    nextPost.authorName = [self.post.authorName isEqualToString:@"Me"] ? @"Another author" : @"Me";
+    static NSUInteger count = 1;
+    nextPost.title = [NSString stringWithFormat:@"Post %@ by %@", @(count++), nextPost.authorName];
+    
+    self.post = nextPost;
+}
+
+- (IBAction)toggleDetails:(id)sender
+{
+    // Hide if all hiddeable rows are hidden, show all otherwise
+    [self.topSection setObjectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(1, 3)]
+                                  hidden:(![self.topSection isObjectAtIndexHidden:1] &&
+                                          ![self.topSection isObjectAtIndexHidden:2] &&
+                                          ![self.topSection isObjectAtIndexHidden:3])];
+}
+
+- (IBAction)hideDetail:(id)sender
+{
+    NSIndexPath * indexPath = [self indexPathForRowWithSubview:sender];
+    PETableViewSection * section = self.sections[indexPath.section];
+    id objectToHide = section.visibleObjects[indexPath.row];
+    [section setObject:objectToHide
+                hidden:YES];
+}
+
+- (IBAction)follow:(id)sender
 {
 }
 
 - (IBAction)reloadComments:(id)sender
 {
+    id loadingCommentsObject = [PECellIdentifier identifierFromString:@"loading_comments"];
+    self.commentsSection.objects = @[loadingCommentsObject];
+    
     // Simulate async message loading
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(),
                    ^{
                        self.commentsSection.objects = @[@"Message 1",
                                                         @"Message 2",
-                                                        @"Message 3"];
+                                                        @"Message 3",
+                                                        [PECellIdentifier identifierFromString:@"load_more_comments"]];
+                   });
+}
+
+- (IBAction)loadMoreComments:(id)sender
+{
+    id loadingCommentsObject = [PECellIdentifier identifierFromString:@"loading_comments"];
+    [self combineChanges:^
+    {
+        // Remove "load more"
+        [self.commentsSection removeObjectAtIndex:self.commentsSection.objects.count - 1];
+        
+        // Add "loading"
+        [self.commentsSection addObject:loadingCommentsObject];
+    }];
+    
+    // Simulate async message loading
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(),
+                   ^{
+                       [self combineChanges:^
+                        {
+                            [self.commentsSection removeObject:loadingCommentsObject];
+                            [self.commentsSection addObjects:@[@"Additional Message 1",
+                                                               @"Additional Message 2",
+                                                               @"Additional Message 3",
+                                                               [PECellIdentifier identifierFromString:@"load_more_comments"]]];
+                        }];
                    });
 }
 
@@ -79,16 +137,23 @@
 
 - (IBAction)deleteComment:(UIButton *)sender
 {
-    CGPoint point = [self.tableView convertPoint:sender.center
-                                        fromView:sender.superview];
-    NSIndexPath * indexPath = [self.tableView indexPathForRowAtPoint:point];
-    
+    NSIndexPath * indexPath = [self indexPathForRowWithSubview:sender];
     PETableViewSection * section = self.sections[indexPath.section];
-    id objectToDelete = section.objects[indexPath.row];
+    id objectToDelete = section.visibleObjects[indexPath.row];
     NSLog(@"Deleting indexPath: %@ object %@", indexPath, objectToDelete);
     
     // Update UI
-    [section removeObject:objectToDelete];
+    [self combineChanges:^
+     {
+         [section removeObject:objectToDelete];
+         
+         // Only "load more" left?
+         if (section.objects.count == 1)
+         {
+             // Remove it as well to let the no content cell appear
+             [section removeObjectAtIndex:0];
+         }
+     }];
 }
 
 #pragma mark - Sections
@@ -97,19 +162,25 @@
 {
     if (!_topSection)
     {
+        __weak typeof(self) weakSelf = self;
+        NSArray * sectionObjects = @[[PECellIdentifier identifierFromString:@"title"],   // 0
+                                     [PECellIdentifier identifierFromString:@"image"],   // 1
+                                     [PECellIdentifier identifierFromString:@"tags"],    // 2
+                                     [PECellIdentifier identifierFromString:@"recipe"]]; // 3
         _topSection = [PETableViewSection
-                       sectionWithObjects:@[[PECellIdentifier identifierFromString:@"PEPhotosDetailTitleCell"],
-                                            [PECellIdentifier identifierFromString:@"PEPhotosDetailImageCell"]]
+                       sectionWithObjects:sectionObjects
                        cellIdentifierBlock:NULL
                        rowHeightBlock:^CGFloat(id object,
                                                NSIndexPath * indexPath)
                        {
-                           switch (indexPath.row)
+                           switch ([sectionObjects indexOfObject:object]) // Can't use indexPath.row beacuse we hide/show rows
                            {
                                case 0:
                                    return 40.0;
                                case 1:
                                    return 160.0;
+                               case 3:
+                                   return 170.0;
                                default:
                                    return -1.0; // Table view's default height
                            }
@@ -123,7 +194,7 @@
                                case 0:
                                {
                                    PEPhotosDetailTitleCell * titleCell = (PEPhotosDetailTitleCell *)cell;
-                                   titleCell.textLabel.text = @"Hi!";
+                                   titleCell.textLabel.text = weakSelf.post.title;
                                    break;
                                }
                                case 1:
@@ -131,14 +202,12 @@
                                    //PEPhotosDetailImageCell * imageCell = (PEPhotosDetailImageCell *)cell;
                                    break;
                                }
-                               case 2:
-                               {
-                                   PEPhotosDetailAuthorCell * authorCell = (PEPhotosDetailAuthorCell *)cell;
-                                   authorCell.authorLabel.text = @"Me";
-                                   break;
-                               }
                            }
                        }];
+        
+        // Initial state
+        [_topSection setObjectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(2, 2)]
+                                  hidden:YES];
     }
     return _topSection;
 }
@@ -147,8 +216,9 @@
 {
     if (!_authorSelfSection)
     {
+        __weak typeof(self) weakSelf = self;
         _authorSelfSection = [PETableViewSection
-                              sectionWithObjects:@[[PECellIdentifier identifierFromString:@"PEPhotosDetailAuthorCell_self"]]
+                              sectionWithObjects:@[[PECellIdentifier identifierFromString:@"author_self"]]
                               cellIdentifierBlock:NULL
                               rowHeightBlock:NULL
                               configurationBlock:^(id object,
@@ -156,7 +226,7 @@
                                                    NSIndexPath * indexPath)
                               {
                                   PEPhotosDetailAuthorCell * authorCell = (PEPhotosDetailAuthorCell *)cell;
-                                  authorCell.authorLabel.text = @"Me";
+                                  authorCell.authorLabel.text = weakSelf.post.authorName;
                               }];
         _authorSelfSection.hidden = YES;
     }
@@ -167,9 +237,9 @@
 {
     if (!_authorOtherSection)
     {
+        __weak typeof(self) weakSelf = self;
         _authorOtherSection = [PETableViewSection
-                               sectionWithObjects:@[[PECellIdentifier identifierFromString:@"PEPhotosDetailAuthorCell"],
-                                                    [PECellIdentifier identifierFromString:@"Mane"]]
+                               sectionWithObjects:@[[PECellIdentifier identifierFromString:@"author_other"]]
                                cellIdentifierBlock:NULL
                                rowHeightBlock:NULL
                                configurationBlock:^(id object,
@@ -181,7 +251,7 @@
                                        case 0:
                                        {
                                            PEPhotosDetailAuthorCell * authorCell = (PEPhotosDetailAuthorCell *)cell;
-                                           authorCell.authorLabel.text = @"Other author";
+                                           authorCell.authorLabel.text = weakSelf.post.authorName;
                                            break;
                                        }
                                    }
@@ -196,7 +266,7 @@
     if (!_writeCommentSection)
     {
         _writeCommentSection = [PETableViewSection
-                                sectionWithObjects:@[[PECellIdentifier identifierFromString:@"WriteComment"]]
+                                sectionWithObjects:@[[PECellIdentifier identifierFromString:@"write_comment"]]
                                 cellIdentifierBlock:NULL
                                 rowHeightBlock:NULL
                                 configurationBlock:NULL];
@@ -209,16 +279,20 @@
     if (!_commentsSection)
     {
         _commentsSection = [PETableViewSection
-                            sectionWithObjects:nil // Start empty
+                            sectionWithObjects:@[[PECellIdentifier identifierFromString:@"loading_comments"]]
                             cellIdentifierBlock:^NSString *(id object,
                                                             NSIndexPath * indexPath)
                             {
-                                return object ? @"PEPhotosDetailMessageCell" : @"NoComments" ;
+                                return ([object isKindOfClass:[PECellIdentifier class]] ? nil :     // Loading comments
+                                        (object ? @"comment" :                                      // A comment
+                                         @"no_comments"));                                          // No content cell
                             }
                             rowHeightBlock:^CGFloat(id object,
                                                     NSIndexPath * indexPath)
                             {
-                                return object ? 170.0 : 88.0;
+                                return ([object isKindOfClass:[PECellIdentifier class]] ? -1.0 :    // Loading comments (default height)
+                                        (object ? 170.0 :                                           // A comment
+                                         88.0));                                                    // No content cell
                             }
                             configurationBlock:^(id object,
                                                  UITableViewCell * cell,
@@ -230,7 +304,7 @@
                                     ((PEPhotosDetailMessageCell *)cell).bodyLabel.text = (NSString *)object;
                                 }
                             }];
-        _commentsSection.presentsNoContentsCell = YES;
+        _commentsSection.presentsNoContentCell = YES;
     }
     return _commentsSection;
 }

@@ -7,10 +7,11 @@
 //
 
 #import "PETableViewController.h"
+@class PEPost;
 
 @interface PEPhotosDetailViewController : PETableViewController
 
-@property (strong, nonatomic) id post;
+@property (strong, nonatomic) PEPost * post;
 
 @property (strong, nonatomic) PETableViewSection * topSection;
 @property (strong, nonatomic) PETableViewSection * authorSelfSection;
@@ -18,8 +19,12 @@
 @property (strong, nonatomic) PETableViewSection * writeCommentSection;
 @property (strong, nonatomic) PETableViewSection * commentsSection;
 
-- (IBAction)tappedFollow:(id)sender;
+- (IBAction)goToNextPost:(id)sender;
+- (IBAction)toggleDetails:(id)sender;
+- (IBAction)hideDetail:(UIButton *)sender;
+- (IBAction)follow:(id)sender;
 - (IBAction)reloadComments:(id)sender;
+- (IBAction)loadMoreComments:(id)sender;
 - (IBAction)writeComment:(id)sender;
 - (IBAction)deleteComment:(UIButton *)sender;
 
