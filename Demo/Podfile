@@ -1,0 +1,15 @@
+
+platform :ios, '5.0'
+
+# For regular projects
+#pod 'PETableViewController'
+
+# Optional for dynamic logging
+#pod 'NBULog'
+
+# Optional for on-device log console
+#pod 'LumberjackConsole'
+
+# For development
+pod 'PETableViewController', :path => '../'
+

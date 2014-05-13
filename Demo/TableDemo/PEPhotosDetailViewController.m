@@ -186,7 +186,7 @@
                                case 0:
                                {
                                    PEPhotosDetailTitleCell * titleCell = (PEPhotosDetailTitleCell *)cell;
-                                   titleCell.textLabel.text = weakSelf.post.title;
+                                   titleCell.titleLabel.text = weakSelf.post.title;
                                    break;
                                }
                                case 1:

@@ -6,7 +6,7 @@
 //  Copyright (c) 2014年 CyberAgent Inc. All rights reserved.
 //
 
-#import "PETableViewController.h"
+#import <PETableViewController/PETableViewController.h>
 @class PEPost;
 
 @interface PEPhotosDetailViewController : PETableViewController

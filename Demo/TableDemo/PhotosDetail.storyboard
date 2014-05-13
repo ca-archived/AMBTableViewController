@@ -9,7 +9,7 @@
         <scene sceneID="aBa-I7-TJ0">
             <objects>
                 <tableViewController storyboardIdentifier="PEPhotosDetailViewController" id="3TV-9a-Wve" customClass="PEPhotosDetailViewController" sceneMemberID="viewController">
-                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="60" sectionHeaderHeight="22" sectionFooterHeight="22" id="voB-Zg-67g">
+                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" allowsSelection="NO" rowHeight="60" sectionHeaderHeight="22" sectionFooterHeight="22" id="voB-Zg-67g">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="1600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -23,16 +23,16 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="5md-gd-6wI">
-                                            <rect key="frame" x="15" y="10" width="33" height="21"/>
+                                            <rect key="frame" x="15" y="10" width="196" height="21"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="ahb-PC-yXZ">
-                                            <rect key="frame" x="177" y="5" width="123" height="30"/>
+                                            <rect key="frame" x="214" y="5" width="95" height="30"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                                            <state key="normal" title="Show/hide details">
+                                            <state key="normal" title="Toggle details">
                                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                             </state>
                                             <connections>
@@ -386,6 +386,7 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" id="7Lh-d5-phW">
+                        <nil key="title"/>
                         <barButtonItem key="rightBarButtonItem" title="Next post" id="20b-OP-Meu">
                             <connections>
                                 <action selector="goToNextPost:" destination="3TV-9a-Wve" id="kKJ-s8-4pJ"/>

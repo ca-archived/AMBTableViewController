@@ -1,0 +1,14 @@
+PODS:
+  - PETableViewController (0.0.1)
+
+DEPENDENCIES:
+  - PETableViewController (from `../`)
+
+EXTERNAL SOURCES:
+  PETableViewController:
+    :path: ../
+
+SPEC CHECKSUMS:
+  PETableViewController: c61ea87507c50ffc24aefbb0b2eff4f640ea1f1b
+
+COCOAPODS: 0.32.1
