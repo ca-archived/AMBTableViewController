@@ -147,21 +147,34 @@
     // Retrieve the cell identifier
     PETableViewSection * section = self.sections[indexPath.section];
     id object = section.objects.count ? section.visibleObjects[indexPath.row] : nil;
-    NSString * cellIdentifier;
-    if (section.cellIdentifierBlock)
-    {
-        cellIdentifier = section.cellIdentifierBlock(object,
-                                                     indexPath);
-    }
-    if (!cellIdentifier && [object isKindOfClass:[PECellIdentifier class]])
-    {
-        cellIdentifier = ((PECellIdentifier *)object).string;
-    }
-    NSAssert(cellIdentifier, @"No cell identifier found");
     
-    // Dequeue a cell
-    UITableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-    NSAssert(cell, @"No cell could be dequeued with the given identifier.");
+    UITableViewCell * cell;
+    
+    // Already a cell?
+    if ([object isKindOfClass:[UITableViewCell class]])
+    {
+        cell = object;
+    }
+    
+    // Get a cell idenfier
+    else
+    {
+        NSString * cellIdentifier;
+        if (section.cellIdentifierBlock)
+        {
+            cellIdentifier = section.cellIdentifierBlock(object,
+                                                         indexPath);
+        }
+        if (!cellIdentifier && [object isKindOfClass:[PECellIdentifier class]])
+        {
+            cellIdentifier = ((PECellIdentifier *)object).string;
+        }
+        NSAssert(cellIdentifier, @"No cell identifier found");
+        
+        // Dequeue a cell
+        cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+        NSAssert(cell, @"No cell could be dequeued with the given identifier.");
+    }
     
     // Configure the cell
     if (section.configurationBlock)
