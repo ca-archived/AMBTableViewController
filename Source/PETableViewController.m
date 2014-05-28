@@ -102,9 +102,7 @@
     [_mutableSections replaceObjectAtIndex:index
                                 withObject:section];
     section.controller = self;
-    
-    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:index]
-                  withRowAnimation:UITableViewRowAnimationAutomatic];
+    [section reload];
 }
 
 - (NSIndexPath *)indexPathForRowWithSubview:(UIView *)subview
@@ -121,7 +119,12 @@
     if (self.tableView)
     {
         [self.tableView beginUpdates];
-        changes();
+    }
+    
+    changes();
+    
+    if (self.tableView)
+    {
         [self.tableView endUpdates];
     }
 }
@@ -251,7 +254,7 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     _hidden = hidden;
     
-    [self reloadSection];
+    [self reload];
 }
 
 - (NSString *)description
@@ -275,7 +278,7 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath
     [self updateVisibleObjects];
     
     // Update table view
-    [self reloadSection];
+    [self reload];
 }
 
 - (NSArray *)objects
@@ -332,7 +335,7 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath
     [self updateVisibleObjects];
     
     // Update table view
-    [self insertRowsWithIndexes:[self rowIndexSetForObjectIndexSet:indexSet]];
+    [self insertRowsWithIndexes:[self rowIndexSetForVisibleObjectsInIndexSet:indexSet]];
 }
 
 - (void)removeObject:(id)object
@@ -365,7 +368,7 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath
     [self updateVisibleObjects];
     
     // Update table view
-    [self deleteRowsWithIndexes:[self rowIndexSetForObjectIndexSet:indexSet]];
+    [self deleteRowsWithIndexes:[self rowIndexSetForVisibleObjectsInIndexSet:indexSet]];
 }
 
 - (BOOL)isObjectHidden:(id)object
@@ -410,7 +413,7 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath
         
         if (newObjectIndexesToHide.count)
         {
-            NSIndexSet * newRowIndexesToDelete = [self rowIndexSetForObjectIndexSet:newObjectIndexesToHide];
+            NSIndexSet * newRowIndexesToDelete = [self rowIndexSetForVisibleObjectsInIndexSet:newObjectIndexesToHide];
             
             [_hiddenObjectsMutableIndexSet addIndexes:newObjectIndexesToHide];
             [self updateVisibleObjects];
@@ -434,23 +437,57 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath
             [_hiddenObjectsMutableIndexSet removeIndexes:newIndexesToShow];
             [self updateVisibleObjects];
             
-            NSIndexSet * newRowIndexesToInsert = [self rowIndexSetForObjectIndexSet:newIndexesToShow];
+            NSIndexSet * newRowIndexesToInsert = [self rowIndexSetForVisibleObjectsInIndexSet:newIndexesToShow];
             [self insertRowsWithIndexes:newRowIndexesToInsert];
         }
     }
 }
 
-#pragma mark - Internal Methods
+#pragma mark - Reloading Section and Objects
 
-- (void)reloadSection
+- (void)reload
 {
     if (self.controller)
     {
         NSUInteger sectionIndex = [self.controller.sections indexOfObject:self];
         [self.controller.tableView reloadSections:[NSIndexSet indexSetWithIndex:sectionIndex]
-                                 withRowAnimation:UITableViewRowAnimationFade];
+                                 withRowAnimation:UITableViewRowAnimationNone];
     }
 }
+
+- (void)reloadObject:(id)object
+{
+    [self reloadObjectsAtIndexes:[NSIndexSet indexSetWithIndex:[self.objects indexOfObject:object]]];
+}
+
+- (void)reloadObjectAtIndex:(NSUInteger)index
+{
+    [self reloadObjectsAtIndexes:[NSIndexSet indexSetWithIndex:index]];
+}
+
+- (void)reloadObjects:(NSArray *)objects
+{
+    [self reloadObjectsAtIndexes:[self indexSetForObjects:objects]];
+}
+
+- (void)reloadObjectsAtIndexes:(NSIndexSet *)indexSet
+{
+    if (self.controller)
+    {
+        NSMutableIndexSet * visibleObjectIndexesToReload = [NSMutableIndexSet indexSet];
+        [visibleObjectIndexesToReload addIndexes:indexSet];
+        [visibleObjectIndexesToReload removeIndexes:self.hiddenObjectsIndexSet];
+        
+        if (visibleObjectIndexesToReload.count)
+        {
+            NSArray * pathsToReload = [self indexPathsForRowIndexes:[self rowIndexSetForVisibleObjectsInIndexSet:visibleObjectIndexesToReload]];
+            [self.controller.tableView reloadRowsAtIndexPaths:pathsToReload
+                                             withRowAnimation:UITableViewRowAnimationNone];
+        }
+    }
+}
+
+#pragma mark - Internal Methods
 
 - (void)insertRowsWithIndexes:(NSIndexSet *)rowIndexSet
 {
@@ -480,7 +517,7 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath
     return indexSet;
 }
 
-- (NSIndexSet *)rowIndexSetForObjectIndexSet:(NSIndexSet *)indexSet
+- (NSIndexSet *)rowIndexSetForVisibleObjectsInIndexSet:(NSIndexSet *)indexSet
 {
     NSMutableIndexSet * rowIndexSet = [NSMutableIndexSet indexSet];
     NSUInteger countOfHiddenObjectsBelowIndex;

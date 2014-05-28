@@ -61,6 +61,16 @@ typedef void        (^PETableViewCellConfigurationBlock)(id object,
 @property (copy, nonatomic, readonly)   PETableViewCellConfigurationBlock configurationBlock;
 @property (weak, nonatomic, readonly)   PETableViewController * controller;
 
+/// @name Reloading Section and Objects
+
+- (void)reload;
+
+- (void)reloadObject:(id)object;
+- (void)reloadObjectAtIndex:(NSUInteger)index;
+
+- (void)reloadObjects:(NSArray *)objects;
+- (void)reloadObjectsAtIndexes:(NSIndexSet *)indexSet;
+
 /// @name Managing Objects
 
 @property (strong, nonatomic)           NSArray * objects;
