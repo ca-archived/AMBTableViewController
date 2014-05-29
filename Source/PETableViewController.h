@@ -56,10 +56,11 @@ typedef void        (^PETableViewCellConfigurationBlock)(id object,
 @property(nonatomic)                    BOOL presentsNoContentCell;
 
 @property (nonatomic, readonly)         NSUInteger numberOfRows;
-@property (copy, nonatomic, readonly)   PETableViewCellHeightBlock rowHeightBlock;
-@property (copy, nonatomic, readonly)   PETableViewCellIdentifierBlock cellIdentifierBlock;
-@property (copy, nonatomic, readonly)   PETableViewCellConfigurationBlock configurationBlock;
-@property (weak, nonatomic, readonly)   PETableViewController * controller;
+
+@property (copy, nonatomic)             PETableViewCellHeightBlock rowHeightBlock;
+@property (copy, nonatomic)             PETableViewCellIdentifierBlock cellIdentifierBlock;
+@property (copy, nonatomic)             PETableViewCellConfigurationBlock configurationBlock;
+@property (weak, nonatomic)             PETableViewController * controller;
 
 /// @name Reloading Section and Objects
 

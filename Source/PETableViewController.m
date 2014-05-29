@@ -8,17 +8,6 @@
 
 #import "PETableViewController.h"
 
-// Private properties
-@interface PETableViewSection ()
-
-@property (weak, nonatomic)   PETableViewController * controller;
-@property (copy, nonatomic)   PETableViewCellHeightBlock rowHeightBlock;
-@property (copy, nonatomic)   PETableViewCellIdentifierBlock cellIdentifierBlock;
-@property (copy, nonatomic)   PETableViewCellConfigurationBlock configurationBlock;
-
-@end
-
-
 @implementation PETableViewController
 {
     NSMutableArray * _mutableSections;
