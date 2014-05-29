@@ -163,14 +163,14 @@
     else
     {
         NSString * cellIdentifier;
-        if (section.cellIdentifierBlock)
+        if ([object isKindOfClass:[PECellIdentifier class]])
+        {
+            cellIdentifier = ((PECellIdentifier *)object).string;
+        }
+        else if (section.cellIdentifierBlock)
         {
             cellIdentifier = section.cellIdentifierBlock(object,
                                                          indexPath);
-        }
-        if (!cellIdentifier && [object isKindOfClass:[PECellIdentifier class]])
-        {
-            cellIdentifier = ((PECellIdentifier *)object).string;
         }
         NSAssert(cellIdentifier, @"No cell identifier found");
         
