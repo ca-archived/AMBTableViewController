@@ -210,7 +210,7 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath
                     rowHeightBlock:(PETableViewCellHeightBlock)rowHeightBlock
                 configurationBlock:(PETableViewCellConfigurationBlock)configurationBlock
 {
-    PETableViewSection * section = [PETableViewSection new];
+    PETableViewSection * section = [self new];
     section.objects = objects;
     section.cellIdentifierBlock = cellIdentifierBlock;
     section.rowHeightBlock = rowHeightBlock;
