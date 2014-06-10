@@ -32,6 +32,19 @@
 
 - (void)combineChanges:(void (^)(void))changes;
 
+/// @name Convenience Methods
+
+- (CGFloat)heightForCellWithIdentifier:(NSString *)identifier
+                                  text:(NSString *)text
+                limitedToNumberOfLines:(NSInteger)numberOfLines;
+
+@end
+
+
+@protocol PEResizableCell <NSObject>
+
+@property (weak, nonatomic) IBOutlet UILabel * resizableLabel;
+
 @end
 
 

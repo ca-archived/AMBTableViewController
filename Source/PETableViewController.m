@@ -118,6 +118,61 @@
     }
 }
 
+#pragma mark - Convenience methods
+
+- (CGFloat)heightForCellWithIdentifier:(NSString *)identifier
+                                  text:(NSString *)text
+                limitedToNumberOfLines:(NSInteger)numberOfLines
+{
+    static NSMutableDictionary * cache;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^
+                  {
+                      cache = [NSMutableDictionary dictionary];
+                  });
+    
+    NSDictionary * cachedValues = cache[identifier];
+    CGFloat minimumHeight;
+    CGFloat heightDifference;
+    CGRect labelBounds;
+    UILabel * label;
+    
+    if (!cachedValues)
+    {
+        UITableViewCell<PEResizableCell> * cell = [self.tableView dequeueReusableCellWithIdentifier:identifier];
+        
+        NSAssert([cell conformsToProtocol:@protocol(PEResizableCell)], @"Cell doesn't conforms to the PEResizableCell protocol.");
+        
+        minimumHeight = cell.frame.size.height;
+        label = cell.resizableLabel;
+        labelBounds = label.bounds;
+        labelBounds.size.height = CGFLOAT_MAX;
+        heightDifference = minimumHeight - label.frame.size.height;
+        
+        NSAssert(label, @"No resizableLabel set in resizable cell");
+        
+        cachedValues = @{@"minimumHeight"    : @(minimumHeight),
+                         @"heightDifference" : @(heightDifference),
+                         @"labelBounds"      : [NSValue valueWithCGRect:labelBounds],
+                         @"label"            : label};
+        cache[identifier] = cachedValues;
+    }
+    else
+    {
+        minimumHeight = ((NSNumber *)cachedValues[@"minimumHeight"]).floatValue;
+        heightDifference = ((NSNumber *)cachedValues[@"heightDifference"]).floatValue;
+        labelBounds = ((NSNumber *)cachedValues[@"labelBounds"]).CGRectValue;
+        label = cachedValues[@"label"];
+    }
+    
+    label.text = text;
+    CGRect rect = [label textRectForBounds:labelBounds
+                    limitedToNumberOfLines:numberOfLines];
+    
+    return MAX(rect.size.height + heightDifference,
+               minimumHeight);
+}
+
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
