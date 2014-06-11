@@ -163,7 +163,6 @@
         label = cachedValues[@"label"];
     }
     
-    label.backgroundColor = UIColor.redColor;
     label.text = text;
     CGRect labelBounds = CGRectMake(0.0,
                                     0.0,
