@@ -131,7 +131,8 @@
                       cache = [NSMutableDictionary dictionary];
                   });
     
-    NSDictionary * cachedValues = cache[identifier];
+    NSString * uniqueCellIdenfier = [NSString stringWithFormat:@"%@-%@", NSStringFromClass([self class]), identifier];
+    NSDictionary * cachedValues = cache[uniqueCellIdenfier];
     CGFloat minimumHeight;
     CGFloat heightDifference;
     CGRect labelBounds;
@@ -156,6 +157,7 @@
                          @"labelBounds"      : [NSValue valueWithCGRect:labelBounds],
                          @"label"            : label};
         cache[identifier] = cachedValues;
+        cache[uniqueCellIdenfier] = cachedValues;
     }
     else
     {
