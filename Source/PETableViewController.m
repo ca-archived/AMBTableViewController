@@ -134,8 +134,7 @@
     NSString * uniqueCellIdenfier = [NSString stringWithFormat:@"%@-%@", NSStringFromClass([self class]), identifier];
     NSDictionary * cachedValues = cache[uniqueCellIdenfier];
     CGFloat minimumHeight;
-    CGFloat heightDifference;
-    CGRect labelBounds;
+    CGSize sizeDifference;
     UILabel * label;
     
     if (!cachedValues)
@@ -146,32 +145,34 @@
         
         minimumHeight = cell.frame.size.height;
         label = cell.resizableLabel;
-        labelBounds = label.bounds;
-        labelBounds.size.height = CGFLOAT_MAX;
-        heightDifference = minimumHeight - label.frame.size.height;
+        sizeDifference = cell.frame.size;
+        sizeDifference.width -= label.frame.size.width;
+        sizeDifference.height -= label.frame.size.height;
         
-        NSAssert(label, @"No resizableLabel set in resizable cell");
+        NSAssert(label, @"No resizableLabel set in cell");
         
-        cachedValues = @{@"minimumHeight"    : @(minimumHeight),
-                         @"heightDifference" : @(heightDifference),
-                         @"labelBounds"      : [NSValue valueWithCGRect:labelBounds],
-                         @"label"            : label};
-        cache[identifier] = cachedValues;
+        cachedValues = @{@"minimumHeight"  : @(minimumHeight),
+                         @"sizeDifference" : [NSValue valueWithCGSize:sizeDifference],
+                         @"label"          : label};
         cache[uniqueCellIdenfier] = cachedValues;
     }
     else
     {
         minimumHeight = ((NSNumber *)cachedValues[@"minimumHeight"]).floatValue;
-        heightDifference = ((NSNumber *)cachedValues[@"heightDifference"]).floatValue;
-        labelBounds = ((NSNumber *)cachedValues[@"labelBounds"]).CGRectValue;
+        sizeDifference = ((NSNumber *)cachedValues[@"sizeDifference"]).CGSizeValue;
         label = cachedValues[@"label"];
     }
     
+    label.backgroundColor = UIColor.redColor;
     label.text = text;
+    CGRect labelBounds = CGRectMake(0.0,
+                                    0.0,
+                                    self.tableView.frame.size.width - sizeDifference.width,
+                                    CGFLOAT_MAX);
     CGRect rect = [label textRectForBounds:labelBounds
                     limitedToNumberOfLines:numberOfLines];
     
-    return MAX(rect.size.height + heightDifference,
+    return MAX(rect.size.height + sizeDifference.height,
                minimumHeight);
 }
 
