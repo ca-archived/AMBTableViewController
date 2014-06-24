@@ -554,6 +554,22 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath
     }
 }
 
+- (void)reloadOrHideObjectAtIndex:(NSUInteger)index
+                             when:(BOOL)reloadWhenTrue
+{
+    if (reloadWhenTrue)
+    {
+        [self reloadObjectAtIndex:index];
+        [self setObjectAtIndex:index
+                        hidden:NO];
+    }
+    else
+    {
+        [self setObjectAtIndex:index
+                        hidden:YES];
+    }
+}
+
 #pragma mark - Internal Methods
 
 - (void)insertRowsWithIndexes:(NSIndexSet *)rowIndexSet

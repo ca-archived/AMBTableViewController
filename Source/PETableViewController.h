@@ -91,6 +91,9 @@ typedef void       (^PETableViewCellConfigurationBlock)(id object,
 - (void)reloadObjects:(NSArray *)objects;
 - (void)reloadObjectsAtIndexes:(NSIndexSet *)indexSet;
 
+- (void)reloadOrHideObjectAtIndex:(NSUInteger)index
+                             when:(BOOL)reloadWhenTrue;
+
 /// @name Managing Objects
 
 @property (strong, nonatomic)           NSArray * objects;
