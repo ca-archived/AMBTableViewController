@@ -26,6 +26,8 @@
 - (void)replaceSectionAtIndex:(NSUInteger)index
                   withSection:(PETableViewSection *)section;
 
+- (void)updateAllSections;
+
 - (NSIndexPath *)indexPathForRowWithSubview:(UIView *)subview;
 
 /// @name Combining Multiple Section/Row Changes
@@ -48,19 +50,21 @@
 @end
 
 
-typedef CGFloat     (^PETableViewCellHeightBlock)       (id object,
-                                                         NSIndexPath * indexPath);
-typedef NSString *  (^PETableViewCellIdentifierBlock)   (id object,
-                                                         NSIndexPath * indexPath);
-typedef void        (^PETableViewCellConfigurationBlock)(id object,
-                                                         UITableViewCell * cell,
-                                                         NSIndexPath * indexPath);
+typedef void       (^PETableViewSectionUpdateBlock)    (PETableViewSection * section);
+typedef CGFloat    (^PETableViewCellHeightBlock)       (id object,
+                                                        NSIndexPath * indexPath);
+typedef NSString * (^PETableViewCellIdentifierBlock)   (id object,
+                                                        NSIndexPath * indexPath);
+typedef void       (^PETableViewCellConfigurationBlock)(id object,
+                                                        UITableViewCell * cell,
+                                                        NSIndexPath * indexPath);
 
 @interface PETableViewSection : NSObject
 
 + (instancetype)sectionWithObjects:(NSArray *)objects
+                sectionUpdateBlock:(PETableViewSectionUpdateBlock)sectionUpdateBlock
+                   cellHeightBlock:(PETableViewCellHeightBlock)cellHeightBlock
                cellIdentifierBlock:(PETableViewCellIdentifierBlock)cellIdentifierBlock
-                    rowHeightBlock:(PETableViewCellHeightBlock)rowHeightBlock
                 configurationBlock:(PETableViewCellConfigurationBlock)configurationBlock;
 
 /// @name Properties
@@ -70,13 +74,15 @@ typedef void        (^PETableViewCellConfigurationBlock)(id object,
 
 @property (nonatomic, readonly)         NSUInteger numberOfRows;
 
-@property (copy, nonatomic)             PETableViewCellHeightBlock rowHeightBlock;
+@property (weak, nonatomic)             PETableViewController * controller;
+@property (copy, nonatomic)             PETableViewSectionUpdateBlock sectionUpdateBlock;
+@property (copy, nonatomic)             PETableViewCellHeightBlock cellHeightBlock;
 @property (copy, nonatomic)             PETableViewCellIdentifierBlock cellIdentifierBlock;
 @property (copy, nonatomic)             PETableViewCellConfigurationBlock configurationBlock;
-@property (weak, nonatomic)             PETableViewController * controller;
 
-/// @name Reloading Section and Objects
+/// @name Update and Reload Section and Objects
 
+- (void)update;
 - (void)reload;
 
 - (void)reloadObject:(id)object;

@@ -33,7 +33,8 @@
     {
         section.controller = self;
     }
-    
+    [self updateAllSections];
+
     [self.tableView reloadData];
 }
 
@@ -50,6 +51,7 @@
     [_mutableSections insertObject:section
                            atIndex:index];
     section.controller = self;
+    [section update];
     
     [self.tableView insertSections:[NSIndexSet indexSetWithIndex:index]
                   withRowAnimation:UITableViewRowAnimationAutomatic];
@@ -91,7 +93,16 @@
     [_mutableSections replaceObjectAtIndex:index
                                 withObject:section];
     section.controller = self;
+    
     [section reload];
+}
+
+- (void)updateAllSections
+{
+    for (PETableViewSection * section in self.sections)
+    {
+        [section update];
+    }
 }
 
 - (NSIndexPath *)indexPathForRowWithSubview:(UIView *)subview
@@ -241,10 +252,10 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     PETableViewSection * section = self.sections[indexPath.section];
     id object = section.objects.count ? section.visibleObjects[indexPath.row] : nil;
-    if (section.rowHeightBlock)
+    if (section.cellHeightBlock)
     {
-        CGFloat height = section.rowHeightBlock(object,
-                                                indexPath);
+        CGFloat height = section.cellHeightBlock(object,
+                                                 indexPath);
         return height < 0 ? self.tableView.rowHeight : height;
     }
     return self.tableView.rowHeight;
@@ -263,14 +274,16 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath
 @dynamic hiddenObjectsIndexSet;
 
 + (instancetype)sectionWithObjects:(NSArray *)objects
+                sectionUpdateBlock:(PETableViewSectionUpdateBlock)sectionUpdateBlock
+                   cellHeightBlock:(PETableViewCellHeightBlock)cellHeightBlock
                cellIdentifierBlock:(PETableViewCellIdentifierBlock)cellIdentifierBlock
-                    rowHeightBlock:(PETableViewCellHeightBlock)rowHeightBlock
                 configurationBlock:(PETableViewCellConfigurationBlock)configurationBlock
 {
     PETableViewSection * section = [self new];
     section.objects = objects;
+    section.sectionUpdateBlock = sectionUpdateBlock;
+    section.cellHeightBlock = cellHeightBlock;
     section.cellIdentifierBlock = cellIdentifierBlock;
-    section.rowHeightBlock = rowHeightBlock;
     section.configurationBlock = configurationBlock;
     return section;
 }
@@ -490,6 +503,14 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath
 }
 
 #pragma mark - Reloading Section and Objects
+
+- (void)update
+{
+    if (self.sectionUpdateBlock)
+    {
+        self.sectionUpdateBlock(self);
+    }
+}
 
 - (void)reload
 {
