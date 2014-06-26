@@ -24,6 +24,14 @@
             stringByReplacingOccurrencesOfString:@"\n)>\"" withString:@"\n    )>\""];
 }
 
+- (void)setTableView:(UITableView *)tableView
+{
+    _tableView = tableView;
+    
+    tableView.dataSource = self;
+    tableView.delegate = self;
+}
+
 #pragma mark - Managing sections
 
 - (void)setSections:(NSArray *)sections

@@ -9,7 +9,11 @@
 #import <UIKit/UIKit.h>
 @class PETableViewSection;
 
-@interface PETableViewController : UITableViewController
+@interface PETableViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
+
+/// @name The Table View
+
+@property (weak, nonatomic) IBOutlet UITableView * tableView;
 
 /// @name Managing Sections
 
