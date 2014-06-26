@@ -514,7 +514,7 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath
 
 - (void)reload
 {
-    if (self.controller)
+    if (self.controller.tableView)
     {
         NSUInteger sectionIndex = [self.controller.sections indexOfObject:self];
         [self.controller.tableView reloadSections:[NSIndexSet indexSetWithIndex:sectionIndex]
@@ -539,7 +539,7 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath
 
 - (void)reloadObjectsAtIndexes:(NSIndexSet *)indexSet
 {
-    if (self.controller)
+    if (self.controller.tableView)
     {
         NSMutableIndexSet * visibleObjectIndexesToReload = [NSMutableIndexSet indexSet];
         [visibleObjectIndexesToReload addIndexes:indexSet];
@@ -574,7 +574,7 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath
 
 - (void)insertRowsWithIndexes:(NSIndexSet *)rowIndexSet
 {
-    if (self.controller)
+    if (self.controller.tableView)
     {
         [self.controller.tableView insertRowsAtIndexPaths:[self indexPathsForRowIndexes:rowIndexSet]
                                          withRowAnimation:UITableViewRowAnimationFade];
@@ -583,7 +583,7 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath
 
 - (void)deleteRowsWithIndexes:(NSIndexSet *)rowIndexSet
 {
-    if (self.controller)
+    if (self.controller.tableView)
     {
         [self.controller.tableView deleteRowsAtIndexPaths:[self indexPathsForRowIndexes:rowIndexSet]
                                          withRowAnimation:UITableViewRowAnimationFade];
