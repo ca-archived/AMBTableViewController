@@ -578,6 +578,35 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath
     }
 }
 
+#pragma mark - Scrolling to objects
+
+- (void)scrollToObject:(id)object
+      atScrollPosition:(UITableViewScrollPosition)scrollPosition
+              animated:(BOOL)animated
+{
+    [self scrollToObjectAtIndex:[self.objects indexOfObject:object]
+               atScrollPosition:scrollPosition
+                       animated:animated];
+}
+
+- (void)scrollToObjectAtIndex:(NSUInteger)index
+             atScrollPosition:(UITableViewScrollPosition)scrollPosition
+                     animated:(BOOL)animated
+{
+    if (!self.controller.tableView)
+        return;
+    
+    NSIndexSet * indexSet = [self rowIndexSetForVisibleObjectsInIndexSet:[NSIndexSet indexSetWithIndex:index]];
+    if (indexSet.count == 1)
+    {
+        NSIndexPath * indexPath = [NSIndexPath indexPathForRow:indexSet.firstIndex
+                                                     inSection:[self.controller.sections indexOfObject:self]];
+        [self.controller.tableView scrollToRowAtIndexPath:indexPath
+                                         atScrollPosition:scrollPosition
+                                                 animated:animated];
+    }
+}
+
 #pragma mark - Internal Methods
 
 - (void)insertRowsWithIndexes:(NSIndexSet *)rowIndexSet

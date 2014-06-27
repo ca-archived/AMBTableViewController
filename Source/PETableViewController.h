@@ -131,6 +131,15 @@ typedef void       (^PETableViewCellConfigurationBlock)(id object,
 - (void)setObjectsAtIndexes:(NSIndexSet *)indexSet
                      hidden:(BOOL)hidden;
 
+/// @name Scrolling to Objects
+
+- (void)scrollToObject:(id)object
+      atScrollPosition:(UITableViewScrollPosition)scrollPosition
+              animated:(BOOL)animated;
+- (void)scrollToObjectAtIndex:(NSUInteger)index
+             atScrollPosition:(UITableViewScrollPosition)scrollPosition
+                     animated:(BOOL)animated;
+
 @end
 
 
