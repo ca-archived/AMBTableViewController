@@ -319,6 +319,9 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath
 
 - (void)setHidden:(BOOL)hidden
 {
+    if (_hidden == hidden)
+        return;
+    
     _hidden = hidden;
     
     [self reload];
