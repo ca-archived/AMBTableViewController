@@ -160,7 +160,7 @@
     {
         UITableViewCell<PEResizableCell> * cell = [self.tableView dequeueReusableCellWithIdentifier:identifier];
         
-        NSAssert([cell conformsToProtocol:@protocol(PEResizableCell)], @"Cell doesn't conforms to the PEResizableCell protocol.");
+        NSAssert([cell conformsToProtocol:@protocol(PEResizableCell)], @"Cell doesn't conform to the PEResizableCell protocol.");
         
         minimumHeight = cell.frame.size.height;
         label = cell.resizableLabel;
