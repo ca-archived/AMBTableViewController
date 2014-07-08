@@ -42,7 +42,7 @@
         section.controller = self;
     }
     [self updateAllSections];
-
+    
     [self.tableView reloadData];
 }
 
@@ -245,11 +245,11 @@
     }
     
     // Configure the cell
-    if (section.configurationBlock)
+    if (section.cellConfigurationBlock)
     {
-        section.configurationBlock(object,
-                                   cell,
-                                   indexPath);
+        section.cellConfigurationBlock(object,
+                                       cell,
+                                       indexPath);
     }
     
     return cell;
@@ -285,14 +285,14 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath
                 sectionUpdateBlock:(PETableViewSectionUpdateBlock)sectionUpdateBlock
                    cellHeightBlock:(PETableViewCellHeightBlock)cellHeightBlock
                cellIdentifierBlock:(PETableViewCellIdentifierBlock)cellIdentifierBlock
-                configurationBlock:(PETableViewCellConfigurationBlock)configurationBlock
+            cellConfigurationBlock:(PETableViewCellConfigurationBlock)cellConfigurationBlock
 {
     PETableViewSection * section = [self new];
     section.objects = objects;
     section.sectionUpdateBlock = sectionUpdateBlock;
     section.cellHeightBlock = cellHeightBlock;
     section.cellIdentifierBlock = cellIdentifierBlock;
-    section.configurationBlock = configurationBlock;
+    section.cellConfigurationBlock = cellConfigurationBlock;
     return section;
 }
 

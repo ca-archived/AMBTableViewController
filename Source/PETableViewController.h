@@ -69,7 +69,7 @@ typedef void       (^PETableViewCellConfigurationBlock)(id object,
                 sectionUpdateBlock:(PETableViewSectionUpdateBlock)sectionUpdateBlock
                    cellHeightBlock:(PETableViewCellHeightBlock)cellHeightBlock
                cellIdentifierBlock:(PETableViewCellIdentifierBlock)cellIdentifierBlock
-                configurationBlock:(PETableViewCellConfigurationBlock)configurationBlock;
+            cellConfigurationBlock:(PETableViewCellConfigurationBlock)cellConfigurationBlock;
 
 /// @name Properties
 
@@ -82,7 +82,7 @@ typedef void       (^PETableViewCellConfigurationBlock)(id object,
 @property (copy, nonatomic)             PETableViewSectionUpdateBlock sectionUpdateBlock;
 @property (copy, nonatomic)             PETableViewCellHeightBlock cellHeightBlock;
 @property (copy, nonatomic)             PETableViewCellIdentifierBlock cellIdentifierBlock;
-@property (copy, nonatomic)             PETableViewCellConfigurationBlock configurationBlock;
+@property (copy, nonatomic)             PETableViewCellConfigurationBlock cellConfigurationBlock;
 
 /// @name Update and Reload Section and Objects
 
