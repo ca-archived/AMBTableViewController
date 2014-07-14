@@ -8,7 +8,7 @@
 
 // PETableViewController
 #define COCOAPODS_POD_AVAILABLE_PETableViewController
-#define COCOAPODS_VERSION_MAJOR_PETableViewController 0
+#define COCOAPODS_VERSION_MAJOR_PETableViewController 1
 #define COCOAPODS_VERSION_MINOR_PETableViewController 0
-#define COCOAPODS_VERSION_PATCH_PETableViewController 1
+#define COCOAPODS_VERSION_PATCH_PETableViewController 0
 

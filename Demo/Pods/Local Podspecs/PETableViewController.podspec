@@ -2,7 +2,7 @@
 Pod::Spec.new do |s|
 
   s.name         = "PETableViewController"
-  s.version      = "0.0.1"
+  s.version      = "1.0.0"
   s.summary      = "Storyboard-centric block-based controller that simplifies management and sync of UITableView and its dataSource."
 
   s.description  = <<-DESC

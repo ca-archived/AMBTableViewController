@@ -53,7 +53,7 @@
 @end
 
 
-@interface PEPhotosDetailMessageCell : UITableViewCell
+@interface PEPhotosDetailCommentCell : UITableViewCell <PEResizableCell>
 
 @property (weak, nonatomic) IBOutlet UILabel * bodyLabel;
 
