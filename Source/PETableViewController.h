@@ -1,45 +1,97 @@
 //
 //  PETableViewController.h
-//  pecolly
+//  PETableViewController
 //
-//  Created by 利辺羅 on 2014/05/07.
-//  Copyright (c) 2014年 CyberAgent Inc. All rights reserved.
+//  Created by Ernesto Rivera on 2014/05/07.
+//  Copyright (c) 2014 CyberAgent Inc.
+//
+//  Licensed under the Apache License, Version 2.0 (the "License");
+//  you may not use this file except in compliance with the License.
+//  You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS,
+//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  See the License for the specific language governing permissions and
+//  limitations under the License.
 //
 
 #import <UIKit/UIKit.h>
 @class PETableViewSection;
 
+/**
+ A controller that manages a UITableView using PETableViewSection to be configured.
+ 
+ - Based on Storyboards and Prototype Cells.
+ - Modularizes section code.
+ - Uses blocks instead of delegate methods.
+ - Avoids having section code separated through multiple methods.
+ - Sections and individual rows can be hidden/shown, added/removed.
+ - Support for dynamic height cells.
+ */
 @interface PETableViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
 
-/// @name The Table View
+/// @name Properties
 
+/// The managed table view.
 @property (weak, nonatomic) IBOutlet UITableView * tableView;
+
+/// The presented sections.
+@property (strong, nonatomic) NSArray * sections;
+
 
 /// @name Managing Sections
 
-@property (strong, nonatomic) NSArray * sections;
-
+/// Insert a section into the sections array.
+/// @param section The section to be inserted.
+/// @param index The index to insert the section at.
 - (void)insertSection:(PETableViewSection *)section
               atIndex:(NSUInteger)index;
 
+/// Remove a section.
+/// @param section The section to be removed.
 - (void)removeSection:(PETableViewSection *)section;
+
+/// Remove the section at a given index.
+/// @param index The index of the section to be removed.
 - (void)removeSectionAtIndex:(NSUInteger)index;
 
+/// Replace a section for another one.
+/// @param sectionToReplace The section to be replaced.
+/// @param section The replacing section.
 - (void)replaceSection:(PETableViewSection *)sectionToReplace
            withSection:(PETableViewSection *)section;
+
+/// Replace a section at a given index for another one.
+/// @param index The index of the section to be replaced.
+/// @param section The replacing section.
 - (void)replaceSectionAtIndex:(NSUInteger)index
                   withSection:(PETableViewSection *)section;
 
+/// @name Refreshing the Table View Contents
+
+/// Trigger [PETableViewSection update] on all sections.
 - (void)updateAllSections;
-
-- (NSIndexPath *)indexPathForRowWithSubview:(UIView *)subview;
-
-/// @name Combining Multiple Section/Row Changes
-
-- (void)combineChanges:(void (^)(void))changes;
 
 /// @name Convenience Methods
 
+/// Combine several section and row changes between [UITableView beginUpdates] and
+/// [UITableView endUpdates].
+- (void)combineChanges:(void (^)(void))changes;
+
+/// Retrieve the index path of the row containing a given subview.
+/// @param subview A subview of the row.
+- (NSIndexPath *)indexPathForRowWithSubview:(UIView *)subview;
+
+/// Calculate the required height for a dynamic height label.
+/// @param identifier The identifier of the PEResizableCell who's height will be calculated.
+/// @param text The text that the [PEResizableCell resizableLabel] should fit.
+/// @param numberOfLines The maximum number of lines to be used by the label or `0` for no limits.
+/// @discussion A cell instance of the given identifier will be cached to calculate the heights
+/// of all future calculations. The original height of the loaded cell will be used as the
+/// minimum height to be returned by the function.
 - (CGFloat)heightForCellWithIdentifier:(NSString *)identifier
                                   text:(NSString *)text
                 limitedToNumberOfLines:(NSInteger)numberOfLines;
@@ -47,24 +99,64 @@
 @end
 
 
-@protocol PEResizableCell <NSObject>
+/// @name  PETableViewSection Blocks
 
-@property (weak, nonatomic) IBOutlet UILabel * resizableLabel;
+/// A block where any aspect of the section can be changed and rows can set to be shown/hidden,
+/// reloaded, etc.
+/// @param The section to be updated.
+typedef void (^PETableViewSectionUpdateBlock) (PETableViewSection * section);
 
-@end
+/// Calculate the height of the cell corresponding to a given section object.
+/// @param object The object who's corresponing cell needs to be calculated.
+/// @param indexPath The index path of the corresponding cell.
+/// @return The desired height. When there is no [PETableViewSection cellHeightBlock] or the
+/// block returns a negative height the default [UITableView rowHeight] is used.
+typedef CGFloat (^PETableViewCellHeightBlock) (id object,
+                                               NSIndexPath * indexPath);
+
+/// The Prototype Cell identifier that should be loaded for a given object.
+/// @param object The object who's corresponing cell needs to be calculated.
+/// @param indexPath The index path of the corresponding cell.
+/// @return A Prototype Cell identifier.
+/// @discussion Depending on the kind of object this method may never be called.
+/// @see [PETableViewSection objects].
+typedef NSString * (^PETableViewCellIdentifierBlock) (id object,
+                                                      NSIndexPath * indexPath);
+
+/// A block used to configure a cell for a given object and index path.
+/// @param object The object who's corresponing cell will be configured.
+/// @param cell The cell to be configured.
+/// @param indexPath The index path of the corresponding cell.
+typedef void (^PETableViewCellConfigurationBlock)(id object,
+                                                  UITableViewCell * cell,
+                                                  NSIndexPath * indexPath);
 
 
-typedef void       (^PETableViewSectionUpdateBlock)    (PETableViewSection * section);
-typedef CGFloat    (^PETableViewCellHeightBlock)       (id object,
-                                                        NSIndexPath * indexPath);
-typedef NSString * (^PETableViewCellIdentifierBlock)   (id object,
-                                                        NSIndexPath * indexPath);
-typedef void       (^PETableViewCellConfigurationBlock)(id object,
-                                                        UITableViewCell * cell,
-                                                        NSIndexPath * indexPath);
-
+/**
+ An object that groups blocks of code to manage rows in a table view section.
+ 
+ Sections use an abstract list of objects to be managed.
+ 
+ - An object corresponds to a cell when it is not set to hidden.
+ - A non-hidden object gets a cell loaded by a given identifier unless the object is
+ already a UITableViewCell.
+ - If the object is a PECellIdentifier then cellIdentifierBlock is skipped for that cell.
+ - When presentsNoContentCell is set to `YES` all blocks are called with a `nil` object.
+ - Hidding/showing/inserting/removing objects automatically updates the corresponding table cells.
+ 
+ A section can be set to hidden, in which case it ignores its objects and returns `0` as its numberOfRows.
+ */
 @interface PETableViewSection : NSObject
 
+/// @name Creating Sections
+
+/// Create and return a new section.
+/// @param objects An abstract list of objects to be presented by the section.
+/// @param sectionUpdateBlock An optinal block to be called on update on
+/// [PETableViewController updateAllSections] calls.
+/// @param cellHeightBlock An optional block to be called on [UITableView tableView:heightForRowAtIndexPath:].
+/// @param cellIdentifierBlock The block to be called when a cell needs to be loaded.
+/// @param cellConfigurationBlock An optional block to be called to configure a loaded or reused cell.
 + (instancetype)sectionWithObjects:(NSArray *)objects
                 sectionUpdateBlock:(PETableViewSectionUpdateBlock)sectionUpdateBlock
                    cellHeightBlock:(PETableViewCellHeightBlock)cellHeightBlock
@@ -73,69 +165,160 @@ typedef void       (^PETableViewCellConfigurationBlock)(id object,
 
 /// @name Properties
 
+/// Whether the section should be hidden or not. Default `NO`.
+/// @discussion When set to `YES` the numberOfRows returns `0`.
 @property(nonatomic, getter=isHidden)   BOOL hidden;
+
+/// Whether the section should present a special "No Content" cell when objects is empty. Default `NO`.
+/// @discussion When set to `YES` the numberOfRows returns `1` and cellHeightBlock, cellIdentifierBlock and
+/// cellConfigurationBlock will all be called with an `nil` object.
 @property(nonatomic)                    BOOL presentsNoContentCell;
 
+/// The number of rows that the section returns to [UITableView tableView:numberOfRowsInSection:].
 @property (nonatomic, readonly)         NSUInteger numberOfRows;
 
+/// The PETableViewController assigned when the section is added to [PETableViewController sections].
 @property (weak, nonatomic)             PETableViewController * controller;
+
+/// An optinal block to be called on update on [PETableViewController updateAllSections] calls.
 @property (copy, nonatomic)             PETableViewSectionUpdateBlock sectionUpdateBlock;
+
+/// An optional block to be called on [UITableView tableView:heightForRowAtIndexPath:].
 @property (copy, nonatomic)             PETableViewCellHeightBlock cellHeightBlock;
+
+/// The block to be called when a cell needs to be loaded.
 @property (copy, nonatomic)             PETableViewCellIdentifierBlock cellIdentifierBlock;
+
+/// An optional block to be called to configure a loaded or reused cell.
 @property (copy, nonatomic)             PETableViewCellConfigurationBlock cellConfigurationBlock;
-
-/// @name Update and Reload Section and Objects
-
-- (void)update;
-- (void)reload;
-
-- (void)reloadObject:(id)object;
-- (void)reloadObjectAtIndex:(NSUInteger)index;
-
-- (void)reloadObjects:(NSArray *)objects;
-- (void)reloadObjectsAtIndexes:(NSIndexSet *)indexSet;
-
-- (void)reloadOrHideObjectAtIndex:(NSUInteger)index
-                             when:(BOOL)reloadWhenTrue;
 
 /// @name Managing Objects
 
+/// The list of objects that the section handles.
 @property (strong, nonatomic)           NSArray * objects;
+
+/// The list of non-hidden objects. That is objects that have a corresping cell.
 @property (strong, nonatomic, readonly) NSArray * visibleObjects;
+
+/// An index set of all the currently hidden objects.
 @property (strong, nonatomic, readonly) NSIndexSet * hiddenObjectsIndexSet;
 
+/// Add an object to objects.
+/// @param object The object to be added.
 - (void)addObject:(id)object;
+
+/// Add some new objects to appended to the section objects.
+/// @param objects The objects to be added.
 - (void)addObjects:(NSArray *)objects;
 
+/// Insert an object at a given index.
+/// @param object The object to be inserted.
+/// @param index The index where the object should be inserted.
 - (void)insertObject:(id)object
              atIndex:(NSUInteger)index;
+
+/// Insert new objects at some given indexes.
+/// @param objects The object to be inserted.
+/// @param indexSet The indexes where the objects should be inserted.
 - (void)insertObjects:(NSArray *)objects
             atIndexes:(NSIndexSet *)indexSet;
 
+/// Remove an object.
+/// @param object The object to be removed.
 - (void)removeObject:(id)object;
+
+/// Remove an object at a given index.
+/// @param index The index of the object to be removed.
 - (void)removeObjectAtIndex:(NSUInteger)index;
 
+/// Remove several objects.
+/// @param object The object to be removed.
 - (void)removeObjects:(NSArray *)objects;
+
+/// Remove several objects at the given indexes.
+/// @param indexSet The indexes of the objects to be removed.
 - (void)removeObjectsAtIndexes:(NSIndexSet *)indexSet;
 
+/// Whether an object is hidden.
+/// @param object The subject object.
 - (BOOL)isObjectHidden:(id)object;
+
+/// Whether an object at a given index is hidden.
+/// @param index The subject object index.
 - (BOOL)isObjectAtIndexHidden:(NSUInteger)index;
 
+/// Hide/show an object corresponding cell.
+/// @param object The object to be hidden/shown.
+/// @param hidden Whether to show or hide the object.
 - (void)setObject:(id)object
            hidden:(BOOL)hidden;
+
+/// Hide/show an object at a given index.
+/// @param index The index f the object to be hidden/shown.
+/// @param hidden Whether to show or hide the object.
 - (void)setObjectAtIndex:(NSUInteger)index
                   hidden:(BOOL)hidden;
 
+/// Hide/show several objects.
+/// @param objects The objects to be hidden/shown.
+/// @param hidden Whether to show or hide the objects.
 - (void)setObjects:(NSArray *)objects
             hidden:(BOOL)hidden;
+
+/// Hide/show several objects at given indexes.
+/// @param indexSet The indexes of the object to be hidden/shown.
+/// @param hidden Whether to show or hide the objects.
 - (void)setObjectsAtIndexes:(NSIndexSet *)indexSet
                      hidden:(BOOL)hidden;
 
+/// @name Update and Reload the Section
+
+/// Update the section by calling its sectionUpdateBlock.
+- (void)update;
+
+/// Force the table view to fully reload the section.
+/// @note Prefer using using sectionUpdateBlock and calling update.
+- (void)reload;
+
+/// @name Update and Reload Specific Objects
+
+/// Reload a given object's cell.
+/// @param object The object who's cell should be reloaded.
+- (void)reloadObject:(id)object;
+
+/// Reload an object at a given index.
+/// @param index The index object to be reloaded.
+- (void)reloadObjectAtIndex:(NSUInteger)index;
+
+/// Reload several objects.
+/// @param objects The objects to be reloaded.
+- (void)reloadObjects:(NSArray *)objects;
+
+/// Reload several objects at given indexes.
+/// @param indexSet The indexes of the objects to be reloaded.
+- (void)reloadObjectsAtIndexes:(NSIndexSet *)indexSet;
+
+/// Convenience method to either show and reload, or hide an object
+/// depending on the evaluation of a condition.
+/// @param index The index object to be shown/hidden.
+/// @param reloadWhenTrue A condition that determines what to do with the object.
+- (void)reloadOrHideObjectAtIndex:(NSUInteger)index
+                             when:(BOOL)reloadWhenTrue;
+
 /// @name Scrolling to Objects
 
+/// Scroll to a given object.
+/// @param object The object to be scrolled to.
+/// @param scrollPosition The position to be scrolled to.
+/// @param animated Whether to animate the scrolling.
 - (void)scrollToObject:(id)object
       atScrollPosition:(UITableViewScrollPosition)scrollPosition
               animated:(BOOL)animated;
+
+/// Scroll to an object at a given index.
+/// @param index The index of the object to be scrolled to.
+/// @param scrollPosition The position to be scrolled to.
+/// @param animated Whether to animate the scrolling.
 - (void)scrollToObjectAtIndex:(NSUInteger)index
              atScrollPosition:(UITableViewScrollPosition)scrollPosition
                      animated:(BOOL)animated;
@@ -143,11 +326,36 @@ typedef void       (^PETableViewCellConfigurationBlock)(id object,
 @end
 
 
+/**
+ An object that can be used to populate a [PETableViewSection objects] while
+ directly specifying the cell to be loaded.
+ 
+ Useful for cells that require little or no configuration besides being loaded.
+ */
 @interface PECellIdentifier : NSObject
 
+/// Create and return a new object.
 + (instancetype)identifierFromString:(NSString *)string;
 
+/// The Prototype Cell identifier to be loaded.
 @property (strong, nonatomic) NSString * string;
+
+@end
+
+
+/**
+ A protocol that when implemented by a UITableViewCell enables using
+ [PETableViewController heightForCellWithIdentifier:text:limitedToNumberOfLines:]
+ to easily calculate dynamic-sized cells.
+ */
+@protocol PEResizableCell <NSObject>
+
+/// The label that determines the required height of the cell.
+/// @discussion The original cell height is saved and used as the minimum height to used
+/// for the cell.
+/// @note The label should be set to use flexible height and automatically grow/shrink
+/// when its parent cell changes adjusts its height.
+@property (weak, nonatomic) IBOutlet UILabel * resizableLabel;
 
 @end
 

@@ -1,9 +1,21 @@
 //
 //  PETableViewController.m
-//  pecolly
+//  PETableViewController
 //
-//  Created by 利辺羅 on 2014/05/07.
-//  Copyright (c) 2014年 CyberAgent Inc. All rights reserved.
+//  Created by Ernesto Rivera on 2014/05/07.
+//  Copyright (c) 2014 CyberAgent Inc.
+//
+//  Licensed under the Apache License, Version 2.0 (the "License");
+//  you may not use this file except in compliance with the License.
+//  You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS,
+//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  See the License for the specific language governing permissions and
+//  limitations under the License.
 //
 
 #import "PETableViewController.h"
@@ -113,14 +125,7 @@
     }
 }
 
-- (NSIndexPath *)indexPathForRowWithSubview:(UIView *)subview
-{
-    CGPoint point = [self.tableView convertPoint:subview.center
-                                        fromView:subview.superview];
-    return [self.tableView indexPathForRowAtPoint:point];
-}
-
-#pragma mark - Combining changes
+#pragma mark - Convenience methods
 
 - (void)combineChanges:(void (^)(void))changes
 {
@@ -137,7 +142,12 @@
     }
 }
 
-#pragma mark - Convenience methods
+- (NSIndexPath *)indexPathForRowWithSubview:(UIView *)subview
+{
+    CGPoint point = [self.tableView convertPoint:subview.center
+                                        fromView:subview.superview];
+    return [self.tableView indexPathForRowAtPoint:point];
+}
 
 - (CGFloat)heightForCellWithIdentifier:(NSString *)identifier
                                   text:(NSString *)text
