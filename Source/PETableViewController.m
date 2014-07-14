@@ -190,7 +190,8 @@
     CGRect rect = [label textRectForBounds:labelBounds
                     limitedToNumberOfLines:numberOfLines];
     
-    return MAX(rect.size.height + sizeDifference.height,
+    CGFloat cellSeparatorHeight = (self.tableView.separatorStyle == UITableViewCellSeparatorStyleNone) ? 0.0 : 1.0;
+    return MAX(rect.size.height + sizeDifference.height + cellSeparatorHeight,
                minimumHeight);
 }
 
