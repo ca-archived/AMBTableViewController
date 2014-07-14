@@ -198,6 +198,7 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
+    NSAssert(self.tableView, @"Table view not yet set.");
     return self.sections.count;
 }
 
