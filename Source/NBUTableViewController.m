@@ -1,6 +1,6 @@
 //
-//  PETableViewController.m
-//  PETableViewController
+//  NBUTableViewController.m
+//  NBUTableViewController
 //
 //  Created by Ernesto Rivera on 2014/05/07.
 //  Copyright (c) 2014 CyberAgent Inc.
@@ -18,9 +18,9 @@
 //  limitations under the License.
 //
 
-#import "PETableViewController.h"
+#import "NBUTableViewController.h"
 
-@implementation PETableViewController
+@implementation NBUTableViewController
 {
     NSMutableArray * _mutableSections;
 }
@@ -49,7 +49,7 @@
 - (void)setSections:(NSArray *)sections
 {
     _mutableSections = [NSMutableArray arrayWithArray:sections];
-    for (PETableViewSection * section in sections)
+    for (NBUTableViewSection * section in sections)
     {
         section.controller = self;
     }
@@ -63,7 +63,7 @@
     return _mutableSections;
 }
 
-- (void)insertSection:(PETableViewSection *)section
+- (void)insertSection:(NBUTableViewSection *)section
               atIndex:(NSUInteger)index
 {
     NSAssert(index <= self.sections.count, @"Can't insert section at invalid index");
@@ -77,7 +77,7 @@
                   withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
-- (void)removeSection:(PETableViewSection *)section
+- (void)removeSection:(NBUTableViewSection *)section
 {
     NSUInteger index = [self.sections indexOfObject:section];
     NSAssert(index != NSNotFound, @"Can't remove inexistent section");
@@ -95,8 +95,8 @@
                   withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
-- (void)replaceSection:(PETableViewSection *)sectionToReplace
-           withSection:(PETableViewSection *)section
+- (void)replaceSection:(NBUTableViewSection *)sectionToReplace
+           withSection:(NBUTableViewSection *)section
 {
     NSUInteger index = [self.sections indexOfObject:section];
     NSAssert(index != NSNotFound, @"Can't replace inexistent section");
@@ -106,7 +106,7 @@
 }
 
 - (void)replaceSectionAtIndex:(NSUInteger)index
-                  withSection:(PETableViewSection *)section
+                  withSection:(NBUTableViewSection *)section
 {
     NSAssert(index < self.sections.count, @"Can't replace section at invalid index");
     
@@ -119,7 +119,7 @@
 
 - (void)updateAllSections
 {
-    for (PETableViewSection * section in self.sections)
+    for (NBUTableViewSection * section in self.sections)
     {
         [section update];
     }
@@ -168,9 +168,9 @@
     
     if (!cachedValues)
     {
-        UITableViewCell<PEResizableCell> * cell = [self.tableView dequeueReusableCellWithIdentifier:identifier];
+        UITableViewCell<NBUResizableCell> * cell = [self.tableView dequeueReusableCellWithIdentifier:identifier];
         
-        NSAssert([cell conformsToProtocol:@protocol(PEResizableCell)], @"Cell doesn't conform to the PEResizableCell protocol.");
+        NSAssert([cell conformsToProtocol:@protocol(NBUResizableCell)], @"Cell doesn't conform to the NBUResizableCell protocol.");
         
         minimumHeight = cell.frame.size.height;
         label = cell.resizableLabel;
@@ -216,7 +216,7 @@
 - (NSInteger)tableView:(UITableView *)tableView
  numberOfRowsInSection:(NSInteger)sectionIndex
 {
-    PETableViewSection * section = self.sections[sectionIndex];
+    NBUTableViewSection * section = self.sections[sectionIndex];
     NSUInteger numberOfRows = section.numberOfRows;
     return numberOfRows;
 }
@@ -225,7 +225,7 @@
          cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     // Retrieve the cell identifier
-    PETableViewSection * section = self.sections[indexPath.section];
+    NBUTableViewSection * section = self.sections[indexPath.section];
     id object = section.objects.count ? section.visibleObjects[indexPath.row] : nil;
     
     UITableViewCell * cell;
@@ -240,9 +240,9 @@
     else
     {
         NSString * cellIdentifier;
-        if ([object isKindOfClass:[PECellIdentifier class]])
+        if ([object isKindOfClass:[NBUCellIdentifier class]])
         {
-            cellIdentifier = ((PECellIdentifier *)object).string;
+            cellIdentifier = ((NBUCellIdentifier *)object).string;
         }
         else if (section.cellIdentifierBlock)
         {
@@ -270,7 +270,7 @@
 - (CGFloat)tableView:(UITableView *)tableView
 heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    PETableViewSection * section = self.sections[indexPath.section];
+    NBUTableViewSection * section = self.sections[indexPath.section];
     id object = section.objects.count ? section.visibleObjects[indexPath.row] : nil;
     if (section.cellHeightBlock)
     {
@@ -284,7 +284,7 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath
 @end
 
 
-@implementation PETableViewSection
+@implementation NBUTableViewSection
 {
     NSMutableArray * _mutableObjects;
     NSMutableIndexSet * _hiddenObjectsMutableIndexSet;
@@ -294,12 +294,12 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath
 @dynamic hiddenObjectsIndexSet;
 
 + (instancetype)sectionWithObjects:(NSArray *)objects
-                sectionUpdateBlock:(PETableViewSectionUpdateBlock)sectionUpdateBlock
-                   cellHeightBlock:(PETableViewCellHeightBlock)cellHeightBlock
-               cellIdentifierBlock:(PETableViewCellIdentifierBlock)cellIdentifierBlock
-            cellConfigurationBlock:(PETableViewCellConfigurationBlock)cellConfigurationBlock
+                sectionUpdateBlock:(NBUTableViewSectionUpdateBlock)sectionUpdateBlock
+                   cellHeightBlock:(NBUTableViewCellHeightBlock)cellHeightBlock
+               cellIdentifierBlock:(NBUTableViewCellIdentifierBlock)cellIdentifierBlock
+            cellConfigurationBlock:(NBUTableViewCellConfigurationBlock)cellConfigurationBlock
 {
-    PETableViewSection * section = [self new];
+    NBUTableViewSection * section = [self new];
     section.objects = objects;
     section.sectionUpdateBlock = sectionUpdateBlock;
     section.cellHeightBlock = cellHeightBlock;
@@ -316,7 +316,7 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath
               0)));                                             // Empty and doesn't present a no content cell
 }
 
-- (PETableViewController *)controller
+- (NBUTableViewController *)controller
 {
     if (_controller)
     {
@@ -683,11 +683,11 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath
 @end
 
 
-@implementation PECellIdentifier
+@implementation NBUCellIdentifier
 
 + (instancetype)identifierFromString:(NSString *)string
 {
-    PECellIdentifier * identifier = [PECellIdentifier new];
+    NBUCellIdentifier * identifier = [NBUCellIdentifier new];
     identifier.string = string;
     return identifier;
 }

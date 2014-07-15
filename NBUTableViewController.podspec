@@ -1,12 +1,12 @@
 
 Pod::Spec.new do |s|
 
-  s.name         = "PETableViewController"
+  s.name         = "NBUTableViewController"
   s.version      = "1.0.0"
   s.summary      = "Storyboard-centric block-based controller that simplifies management and sync of UITableView and its dataSource."
 
   s.description  = <<-DESC
-                   A longer description of PETableViewController in Markdown format.
+                   A longer description of NBUTableViewController in Markdown format.
 
                    * Think: Why did you write this? What is the focus? What does it do?
                    * CocoaPods will be using this to generate tags, and improve search results.
@@ -14,7 +14,7 @@ Pod::Spec.new do |s|
                    * Finally, don't worry about the indent, CocoaPods strips it!
                    DESC
 
-  s.homepage     = "http://ghe.amb.ca.local/ameba-smartphone/iOS-PETableViewController"
+  s.homepage     = "http://ghe.amb.ca.local/ameba-smartphone/iOS-NBUTableViewController"
   # s.screenshots  = "www.example.com/screenshots_1.gif", "www.example.com/screenshots_2.gif"
 
   s.license      = "All rights reserved."
@@ -28,7 +28,7 @@ Pod::Spec.new do |s|
 
   s.platform     = :ios, "5.0"
 
-  s.source       = { :git => "git@ghe.amb.ca.local:ameba-smartphone/iOS-PETableViewController.git", :commit => "16da9dd20e11169761be1328a00b43305d1f6691" }
+  s.source       = { :git => "git@ghe.amb.ca.local:ameba-smartphone/iOS-NBUTableViewController.git", :commit => "16da9dd20e11169761be1328a00b43305d1f6691" }
 
 
   # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
@@ -39,7 +39,7 @@ Pod::Spec.new do |s|
   #  Not including the public_header_files will make all headers public.
   #
 
-  s.source_files  = "Source/PETableView*.{h,m}"
+  s.source_files  = "Source/NBUTableViewController.{h,m}"
 
   # s.public_header_files = "Classes/**/*.h"
 
