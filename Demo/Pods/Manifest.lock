@@ -9,6 +9,6 @@ EXTERNAL SOURCES:
     :path: ../
 
 SPEC CHECKSUMS:
-  NBUTableViewController: 1d5e4aae626323821b4e619181fc790d0a239d2e
+  NBUTableViewController: 96de541c4ad1fd0943357d2ca0396c13a5adb306
 
 COCOAPODS: 0.33.1
