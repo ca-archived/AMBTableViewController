@@ -1,0 +1,15 @@
+
+language: objective-c
+
+before_install:
+    - gem install cocoapods --pre --quiet
+    - pod --version
+    - pod setup --silent
+    - pod repo update --silent
+
+script:
+    - pod lib lint
+    - cd Demo
+    - pod repo update --silent
+    - pod update
+    - xctool -workspace TableDemo.xcworkspace -scheme 'TableDemo' -configuration Release -sdk iphonesimulator -arch i386 build
