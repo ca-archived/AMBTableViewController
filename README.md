@@ -20,7 +20,7 @@ A demo project is [included](Demo) in the repository and can also be tried onlin
 ![Screenshot 1](http://cyberagent.github.io/iOS-NBUTableViewController/images/screenshot1.png)　![Screenshot 2](http://cyberagent.github.io/iOS-NBUTableViewController/images/screenshot2.png)
 
  - Use Storyboards' Prototype Cells to design your cells.
- - Separate table code with `NBUTableViewSection`'s.
+ - Separate table code with [`NBUTableViewSection`](Source/NBUTableViewController.h#L149)'s.
  - Uses blocks instead of delegate calls and avoid having section code separated through multiple methods.
  - Individual hide/shown, add/remove sections and rows.
  - Support for dynamic height cells.
