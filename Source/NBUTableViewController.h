@@ -232,7 +232,7 @@ typedef void (^NBUTableViewCellConfigurationBlock)(id object,
 - (void)removeObjectAtIndex:(NSUInteger)index;
 
 /// Remove several objects.
-/// @param object The object to be removed.
+/// @param objects The objects to be removed.
 - (void)removeObjects:(NSArray *)objects;
 
 /// Remove several objects at the given indexes.
@@ -335,6 +335,7 @@ typedef void (^NBUTableViewCellConfigurationBlock)(id object,
 @interface NBUCellIdentifier : NSObject
 
 /// Create and return a new object.
+/// @param string An existing Prototype Cell identifier.
 + (instancetype)identifierFromString:(NSString *)string;
 
 /// The Prototype Cell identifier to be loaded.
