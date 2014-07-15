@@ -6,9 +6,9 @@
 // project.
 
 
-// PETableViewController
-#define COCOAPODS_POD_AVAILABLE_PETableViewController
-#define COCOAPODS_VERSION_MAJOR_PETableViewController 1
-#define COCOAPODS_VERSION_MINOR_PETableViewController 0
-#define COCOAPODS_VERSION_PATCH_PETableViewController 0
+// NBUTableViewController
+#define COCOAPODS_POD_AVAILABLE_NBUTableViewController
+#define COCOAPODS_VERSION_MAJOR_NBUTableViewController 1
+#define COCOAPODS_VERSION_MINOR_NBUTableViewController 0
+#define COCOAPODS_VERSION_PATCH_NBUTableViewController 0
 

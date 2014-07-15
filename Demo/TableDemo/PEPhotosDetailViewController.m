@@ -1,6 +1,6 @@
 //
 //  PEPhotosDetailViewController.m
-//  PETableViewController
+//  NBUTableViewController
 //
 //  Created by Ernesto Rivera on 2014/05/06.
 //  Copyright (c) 2014 CyberAgent Inc.
@@ -43,9 +43,9 @@
                       self.topSection,
                       
                       // A section with a single row of one of two kinds
-                      [PETableViewSection
+                      [NBUTableViewSection
                        sectionWithObjects:@[@"author_cell"]
-                       sectionUpdateBlock:^(PETableViewSection * section)
+                       sectionUpdateBlock:^(NBUTableViewSection * section)
                        {
                            [section reloadObjectAtIndex:0];
                        }
@@ -63,10 +63,10 @@
                            authorCell.authorLabel.text = weakSelf.post.authorName;
                        }],
                       
-                      // A section with only a single "static" cell hidden when post is nil
-                      [PETableViewSection
-                       sectionWithObjects:@[[PECellIdentifier identifierFromString:@"write_comment"]]
-                       sectionUpdateBlock:^(PETableViewSection * section)
+                      // A section with a single "static" cell hidden when post is nil
+                      [NBUTableViewSection
+                       sectionWithObjects:@[[NBUCellIdentifier identifierFromString:@"write_comment"]]
+                       sectionUpdateBlock:^(NBUTableViewSection * section)
                        {
                            section.hidden = (weakSelf.post == nil);
                        }
@@ -78,8 +78,8 @@
                       self.commentsSection,
                       
                       // A section with a single "static" cell of custom height
-                      [PETableViewSection
-                       sectionWithObjects:@[[PECellIdentifier identifierFromString:@"footer"]]
+                      [NBUTableViewSection
+                       sectionWithObjects:@[[NBUCellIdentifier identifierFromString:@"footer"]]
                        sectionUpdateBlock:NULL
                        cellHeightBlock:^CGFloat(id object, NSIndexPath * indexPath) { return 120.0; }
                        cellIdentifierBlock:NULL
@@ -88,18 +88,18 @@
     [self goToNextPost:self];
 }
 
-- (PETableViewSection *)topSection
+- (NBUTableViewSection *)topSection
 {
     if (!_topSection)
     {
         __weak typeof(self) weakSelf = self;
-        NSArray * sectionObjects = @[[PECellIdentifier identifierFromString:@"title"],   // 0
-                                     [PECellIdentifier identifierFromString:@"image"],   // 1
-                                     [PECellIdentifier identifierFromString:@"tags"],    // 2
-                                     [PECellIdentifier identifierFromString:@"recipe"]]; // 3
-        _topSection = [PETableViewSection
+        NSArray * sectionObjects = @[[NBUCellIdentifier identifierFromString:@"title"],   // 0
+                                     [NBUCellIdentifier identifierFromString:@"image"],   // 1
+                                     [NBUCellIdentifier identifierFromString:@"tags"],    // 2
+                                     [NBUCellIdentifier identifierFromString:@"recipe"]]; // 3
+        _topSection = [NBUTableViewSection
                        sectionWithObjects:sectionObjects
-                       sectionUpdateBlock:^(PETableViewSection *section)
+                       sectionUpdateBlock:^(NBUTableViewSection *section)
                        {
                            [section reloadObjectAtIndex:0];
                        }
@@ -146,18 +146,18 @@
     return _topSection;
 }
 
-- (PETableViewSection *)commentsSection
+- (NBUTableViewSection *)commentsSection
 {
     if (!_commentsSection)
     {
         __weak typeof(self) weakSelf = self;
-        _commentsSection = [PETableViewSection
-                            sectionWithObjects:@[[PECellIdentifier identifierFromString:@"loading_comments"]]
+        _commentsSection = [NBUTableViewSection
+                            sectionWithObjects:@[[NBUCellIdentifier identifierFromString:@"loading_comments"]]
                             sectionUpdateBlock:NULL
                             cellHeightBlock:^CGFloat(id object,
                                                      NSIndexPath * indexPath)
                             {
-                                if ([object isKindOfClass:[PECellIdentifier class]])
+                                if ([object isKindOfClass:[NBUCellIdentifier class]])
                                 {
                                     return -1.0; // Loading comments (default height)
                                 }
@@ -225,7 +225,7 @@
 - (IBAction)hideDetail:(id)sender
 {
     NSIndexPath * indexPath = [self indexPathForRowWithSubview:sender];
-    PETableViewSection * section = self.sections[indexPath.section];
+    NBUTableViewSection * section = self.sections[indexPath.section];
     id objectToHide = section.visibleObjects[indexPath.row];
     [section setObject:objectToHide
                 hidden:YES];
@@ -235,7 +235,7 @@
 
 - (IBAction)reloadComments:(id)sender
 {
-    self.commentsSection.objects = @[[PECellIdentifier identifierFromString:@"loading_comments"]];
+    self.commentsSection.objects = @[[NBUCellIdentifier identifierFromString:@"loading_comments"]];
     
     // Simulate async message loading
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(),
@@ -243,13 +243,13 @@
                        self.commentsSection.objects = @[@"Message 1",
                                                         @"Message 2",
                                                         @"Message 3",
-                                                        [PECellIdentifier identifierFromString:@"load_more_comments"]];
+                                                        [NBUCellIdentifier identifierFromString:@"load_more_comments"]];
                    });
 }
 
 - (IBAction)loadMoreComments:(id)sender
 {
-    id loadingCommentsObject = [PECellIdentifier identifierFromString:@"loading_comments"];
+    id loadingCommentsObject = [NBUCellIdentifier identifierFromString:@"loading_comments"];
     [self combineChanges:^
      {
          // Remove "load more"
@@ -268,7 +268,7 @@
                             [self.commentsSection addObjects:@[@"Additional Message 1",
                                                                @"Additional Message 2",
                                                                @"Additional Message 3",
-                                                               [PECellIdentifier identifierFromString:@"load_more_comments"]]];
+                                                               [NBUCellIdentifier identifierFromString:@"load_more_comments"]]];
                         }];
                    });
 }
@@ -289,7 +289,7 @@
 - (IBAction)deleteComment:(UIButton *)sender
 {
     NSIndexPath * indexPath = [self indexPathForRowWithSubview:sender];
-    PETableViewSection * section = self.sections[indexPath.section];
+    NBUTableViewSection * section = self.sections[indexPath.section];
     id objectToDelete = section.visibleObjects[indexPath.row];
     NSLog(@"Deleting indexPath: %@ object %@", indexPath, objectToDelete);
     

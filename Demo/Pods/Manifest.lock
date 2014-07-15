@@ -1,14 +1,14 @@
 PODS:
-  - PETableViewController (1.0.0)
+  - NBUTableViewController (1.0.0)
 
 DEPENDENCIES:
-  - PETableViewController (from `../`)
+  - NBUTableViewController (from `../`)
 
 EXTERNAL SOURCES:
-  PETableViewController:
+  NBUTableViewController:
     :path: ../
 
 SPEC CHECKSUMS:
-  PETableViewController: 5d1c77025dbeabe52486433d4b20613c2ad572dd
+  NBUTableViewController: 1d5e4aae626323821b4e619181fc790d0a239d2e
 
 COCOAPODS: 0.33.1

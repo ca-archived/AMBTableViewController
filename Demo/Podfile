@@ -2,7 +2,7 @@
 platform :ios, '5.0'
 
 # For regular projects
-#pod 'PETableViewController'
+#pod 'NBUTableViewController'
 
 # Optional for dynamic logging
 #pod 'NBULog'
@@ -11,5 +11,5 @@ platform :ios, '5.0'
 #pod 'LumberjackConsole'
 
 # For development
-pod 'PETableViewController', :path => '../'
+pod 'NBUTableViewController', :path => '../'
 

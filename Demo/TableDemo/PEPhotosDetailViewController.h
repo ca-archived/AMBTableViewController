@@ -1,6 +1,6 @@
 //
 //  PEPhotosDetailViewController.h
-//  PETableViewController
+//  NBUTableViewController
 //
 //  Created by Ernesto Rivera on 2014/05/06.
 //  Copyright (c) 2014 CyberAgent Inc.
@@ -18,17 +18,17 @@
 //  limitations under the License.
 //
 
-#import <PETableViewController/PETableViewController.h>
+#import <NBUTableViewController/NBUTableViewController.h>
 @class PEPost;
 
-@interface PEPhotosDetailViewController : PETableViewController
+@interface PEPhotosDetailViewController : NBUTableViewController
 
 @property (strong, nonatomic) PEPost * post;
 
-@property (strong, nonatomic) PETableViewSection * topSection;
-@property (strong, nonatomic) PETableViewSection * authorSection;
-@property (strong, nonatomic) PETableViewSection * writeCommentSection;
-@property (strong, nonatomic) PETableViewSection * commentsSection;
+@property (strong, nonatomic) NBUTableViewSection * topSection;
+@property (strong, nonatomic) NBUTableViewSection * authorSection;
+@property (strong, nonatomic) NBUTableViewSection * writeCommentSection;
+@property (strong, nonatomic) NBUTableViewSection * commentsSection;
 
 - (IBAction)goToNextPost:(id)sender;
 - (IBAction)toggleDetails:(id)sender;
@@ -40,6 +40,7 @@
 - (IBAction)deleteComment:(UIButton *)sender;
 
 @end
+
 
 #pragma mark - Cells
 
@@ -65,7 +66,7 @@
 @end
 
 
-@interface PEPhotosDetailCommentCell : UITableViewCell <PEResizableCell>
+@interface PEPhotosDetailCommentCell : UITableViewCell <NBUResizableCell>
 
 @property (weak, nonatomic) IBOutlet UILabel * bodyLabel;
 
