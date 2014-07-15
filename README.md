@@ -13,7 +13,7 @@ _Developed as part of [Pecolly iOS](https://itunes.apple.com/us/app/pecolly-cook
 
 ## Demo
 
-A demo project is included in the repository and can also be tried online [here](https://app.io/OoRIaL).
+A demo project is [included](Demo) in the repository and can also be tried online [here](https://app.io/OoRIaL).
 
 ## Features
 
@@ -42,7 +42,7 @@ http://cocoadocs.org/docsets/NBUTableViewController/
 
 ## Sample Code
 
-Extracted from the included demo project.
+Part of the included [demo project](Demo/TableDemo/PEPhotosDetailViewController.m#L24).
 
 ### Creating and Configuring Sections
 
@@ -205,7 +205,17 @@ tableViewController.sections = @[topSection,
 
 ### Updating The Table
 
-                                      
+Updating all sections:
+
+```obj-c
+- (void)setPost:(PEPost *)post
+{
+    _post = post;
+    
+    [self updateAllSections];
+}
+```
+
 Toggling rows:
 
 ```obj-c
