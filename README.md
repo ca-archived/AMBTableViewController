@@ -44,7 +44,7 @@ http://cocoadocs.org/docsets/NBUTableViewController/
 
 Part of the included [demo project](Demo/TableDemo/PEPhotosDetailViewController.m#L24).
 
-### Creating and Configuring Sections
+### Creating and configuring sections
 
 A section with a single "static" cell of custom height:
 
@@ -193,7 +193,7 @@ commentsSection = [NBUTableViewSection
 commentsSection.presentsNoContentCell = YES;
 ```
 
-### Configuring The Initial Table Configuration
+### Configuring the initial table configuration
 
 ```obj-c
 tableViewController.sections = @[topSection,
@@ -203,7 +203,7 @@ tableViewController.sections = @[topSection,
                                  footerSection];
 ```
 
-### Updating The Table
+### Updating the table
 
 Updating all sections:
 
@@ -231,6 +231,8 @@ Toggling rows:
 ```
 
 ## License
+
+    Copyright 2014 CyberAgent Inc.
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
