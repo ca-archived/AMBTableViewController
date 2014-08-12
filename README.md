@@ -7,6 +7,7 @@ Storyboard and Prototype Cells-centric block-based UITableView controller to man
 [![Platform: iOS](https://img.shields.io/cocoapods/p/NBUTableViewController.svg?style=flat)](http://cocoadocs.org/docsets/NBUTableViewController/)
 [![Version: 1.0.0](https://img.shields.io/cocoapods/v/NBUTableViewController.svg?style=flat)](http://cocoadocs.org/docsets/NBUTableViewController/)
 [![License: Apache 2.0](https://img.shields.io/cocoapods/l/NBUTableViewController.svg?style=flat)](http://cocoadocs.org/docsets/NBUTableViewController/)
+[![Dependency Status](https://www.versioneye.com/objective-c/NBUTableViewController/badge.svg?style=flat)](https://www.versioneye.com/objective-c/NBUTableViewController)
 [![Build Status](http://img.shields.io/travis/CyberAgent/iOS-NBUTableViewController/master.svg?style=flat)](https://travis-ci.org/CyberAgent/iOS-NBUTableViewController)
 
 _Developed as part of [Pecolly iOS](https://itunes.apple.com/us/app/pecolly-cooking-community/id544605228?mt=8)._
