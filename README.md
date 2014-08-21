@@ -8,7 +8,7 @@ Storyboard and Prototype Cells-centric block-based UITableView controller to man
 [![Version: 1.0.0](https://img.shields.io/cocoapods/v/NBUTableViewController.svg?style=flat)](http://cocoadocs.org/docsets/NBUTableViewController/)
 [![License: Apache 2.0](https://img.shields.io/cocoapods/l/NBUTableViewController.svg?style=flat)](http://cocoadocs.org/docsets/NBUTableViewController/)
 [![Dependency Status](https://www.versioneye.com/objective-c/NBUTableViewController/badge.svg?style=flat)](https://www.versioneye.com/objective-c/NBUTableViewController)
-[![Build Status](http://img.shields.io/travis/CyberAgent/iOS-NBUTableViewController/master.svg?style=flat)](https://travis-ci.org/CyberAgent/iOS-NBUTableViewController)
+[![Build Status](http://img.shields.io/travis/CyberAgent/AMBTableViewController/master.svg?style=flat)](https://travis-ci.org/CyberAgent/AMBTableViewController)
 
 _Developed as part of [Pecolly iOS](https://itunes.apple.com/us/app/pecolly-cooking-community/id544605228?mt=8)._
 
@@ -18,7 +18,7 @@ A demo project is [included](Demo) in the repository and can also be tried onlin
 
 ## Features
 
-![Screenshot 1](http://cyberagent.github.io/iOS-NBUTableViewController/images/screenshot1.png)　![Screenshot 2](http://cyberagent.github.io/iOS-NBUTableViewController/images/screenshot2.png)
+![Screenshot 1](http://cyberagent.github.io/AMBTableViewController/images/screenshot1.png)　![Screenshot 2](http://cyberagent.github.io/AMBTableViewController/images/screenshot2.png)
 
  - Use Storyboards' Prototype Cells to design your cells.
  - Separate table code with [`NBUTableViewSection`](Source/NBUTableViewController.h#L149)'s.
