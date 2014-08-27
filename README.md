@@ -1,13 +1,13 @@
 
-NBUTableViewController
+AMBTableViewController
 ======================
 
 Storyboard and Prototype Cells-centric block-based UITableView controller to manage complex layouts.
 
-[![Platform: iOS](https://img.shields.io/cocoapods/p/NBUTableViewController.svg?style=flat)](http://cocoadocs.org/docsets/NBUTableViewController/)
-[![Version: 1.0.0](https://img.shields.io/cocoapods/v/NBUTableViewController.svg?style=flat)](http://cocoadocs.org/docsets/NBUTableViewController/)
-[![License: Apache 2.0](https://img.shields.io/cocoapods/l/NBUTableViewController.svg?style=flat)](http://cocoadocs.org/docsets/NBUTableViewController/)
-[![Dependency Status](https://www.versioneye.com/objective-c/NBUTableViewController/badge.svg?style=flat)](https://www.versioneye.com/objective-c/NBUTableViewController)
+[![Platform: iOS](https://img.shields.io/cocoapods/p/AMBTableViewController.svg?style=flat)](http://cocoadocs.org/docsets/AMBTableViewController/)
+[![Version: 1.0.0](https://img.shields.io/cocoapods/v/AMBTableViewController.svg?style=flat)](http://cocoadocs.org/docsets/AMBTableViewController/)
+[![License: Apache 2.0](https://img.shields.io/cocoapods/l/AMBTableViewController.svg?style=flat)](http://cocoadocs.org/docsets/AMBTableViewController/)
+[![Dependency Status](https://www.versioneye.com/objective-c/AMBTableViewController/badge.svg?style=flat)](https://www.versioneye.com/objective-c/AMBTableViewController)
 [![Build Status](http://img.shields.io/travis/CyberAgent/AMBTableViewController/master.svg?style=flat)](https://travis-ci.org/CyberAgent/AMBTableViewController)
 
 _Developed as part of [Pecolly iOS](https://itunes.apple.com/us/app/pecolly-cooking-community/id544605228?mt=8)._
@@ -21,7 +21,7 @@ A demo project is [included](Demo) in the repository and can also be tried onlin
 ![Screenshot 1](http://cyberagent.github.io/AMBTableViewController/images/screenshot1.png)　![Screenshot 2](http://cyberagent.github.io/AMBTableViewController/images/screenshot2.png)
 
  - Use Storyboards' Prototype Cells to design your cells.
- - Separate table code with [`NBUTableViewSection`](Source/NBUTableViewController.h#L149)'s.
+ - Separate table code with [`AMBTableViewSection`](Source/AMBTableViewController.h#L149)'s.
  - Uses blocks instead of delegate calls and avoid having section code separated through multiple methods.
  - Individual hide/shown, add/remove sections and rows.
  - Support for dynamic height cells.
@@ -34,12 +34,12 @@ Add the following to your [CocoaPods](http://cocoapods.org)' [Podfile](http://gu
 ```ruby
 platform :ios, '5.0'
 
-pod 'NBUTableViewController'
+pod 'AMBTableViewController'
 ```
 
 ## Documentation
 
-http://cocoadocs.org/docsets/NBUTableViewController/
+http://cocoadocs.org/docsets/AMBTableViewController/
 
 ## Sample Code
 
@@ -50,8 +50,8 @@ Part of the included [demo project](Demo/TableDemo/PEPhotosDetailViewController.
 A section with a single "static" cell of custom height:
 
 ```obj-c
-footerSection = [NBUTableViewSection
-                 sectionWithObjects:@[[NBUCellIdentifier identifierFromString:@"footer"]]
+footerSection = [AMBTableViewSection
+                 sectionWithObjects:@[[AMBCellIdentifier identifierFromString:@"footer"]]
                  sectionUpdateBlock:NULL
                  cellHeightBlock:^CGFloat(id object, NSIndexPath * indexPath) { return 120.0; }
                  cellIdentifierBlock:NULL
@@ -61,9 +61,9 @@ footerSection = [NBUTableViewSection
 A section with a single "static" cell hidden when post is `nil`:
 
 ```obj-c
-writeSection = [NBUTableViewSection
-                sectionWithObjects:@[[NBUCellIdentifier identifierFromString:@"write_comment"]]
-                sectionUpdateBlock:^(NBUTableViewSection * section)
+writeSection = [AMBTableViewSection
+                sectionWithObjects:@[[AMBCellIdentifier identifierFromString:@"write_comment"]]
+                sectionUpdateBlock:^(AMBTableViewSection * section)
                 {
                     section.hidden = (weakSelf.post == nil);
                 }
@@ -75,9 +75,9 @@ writeSection = [NBUTableViewSection
 A section with a single row of one of two kinds:
 
 ```obj-c
-authorSection = [NBUTableViewSection
+authorSection = [AMBTableViewSection
                  sectionWithObjects:@[@"author_cell"]
-                 sectionUpdateBlock:^(NBUTableViewSection * section)
+                 sectionUpdateBlock:^(AMBTableViewSection * section)
                  {
                      [section reloadObjectAtIndex:0];
                  }
@@ -99,13 +99,13 @@ authorSection = [NBUTableViewSection
 A section with hideable cells:
 
 ```obj-c
-NSArray * sectionObjects = @[[NBUCellIdentifier identifierFromString:@"title"],   // 0
-                             [NBUCellIdentifier identifierFromString:@"image"],   // 1
-                             [NBUCellIdentifier identifierFromString:@"tags"],    // 2
-                             [NBUCellIdentifier identifierFromString:@"recipe"]]; // 3
-topSection = [NBUTableViewSection
+NSArray * sectionObjects = @[[AMBCellIdentifier identifierFromString:@"title"],   // 0
+                             [AMBCellIdentifier identifierFromString:@"image"],   // 1
+                             [AMBCellIdentifier identifierFromString:@"tags"],    // 2
+                             [AMBCellIdentifier identifierFromString:@"recipe"]]; // 3
+topSection = [AMBTableViewSection
               sectionWithObjects:sectionObjects
-              sectionUpdateBlock:^(NBUTableViewSection *section)
+              sectionUpdateBlock:^(AMBTableViewSection *section)
               {
                   [section reloadObjectAtIndex:0];
               }
@@ -153,13 +153,13 @@ topSection = [NBUTableViewSection
 A section with a dynamic number of cells of dynamic height and a special "no content cell":
 
 ```obj-c
-commentsSection = [NBUTableViewSection
-                   sectionWithObjects:@[[NBUCellIdentifier identifierFromString:@"loading_comments"]]
+commentsSection = [AMBTableViewSection
+                   sectionWithObjects:@[[AMBCellIdentifier identifierFromString:@"loading_comments"]]
                    sectionUpdateBlock:NULL
                    cellHeightBlock:^CGFloat(id object,
                                             NSIndexPath * indexPath)
                    {
-                       if ([object isKindOfClass:[NBUCellIdentifier class]])
+                       if ([object isKindOfClass:[AMBCellIdentifier class]])
                        {
                            return -1.0; // Loading comments (default height)
                        }

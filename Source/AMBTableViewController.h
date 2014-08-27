@@ -1,6 +1,6 @@
 //
-//  NBUTableViewController.h
-//  NBUTableViewController
+//  AMBTableViewController.h
+//  AMBTableViewController
 //
 //  Created by Ernesto Rivera on 2014/05/07.
 //  Copyright (c) 2014 CyberAgent Inc.
@@ -19,10 +19,10 @@
 //
 
 #import <UIKit/UIKit.h>
-@class NBUTableViewSection;
+@class AMBTableViewSection;
 
 /**
- A controller that manages a UITableView using NBUTableViewSection to be configured.
+ A controller that manages a UITableView using AMBTableViewSection to be configured.
  
  - Based on Storyboards and Prototype Cells.
  - Modularizes section code.
@@ -31,7 +31,7 @@
  - Sections and individual rows can be hidden/shown, added/removed.
  - Support for dynamic height cells.
  */
-@interface NBUTableViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
+@interface AMBTableViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
 
 /// @name Properties
 
@@ -47,12 +47,12 @@
 /// Insert a section into the sections array.
 /// @param section The section to be inserted.
 /// @param index The index to insert the section at.
-- (void)insertSection:(NBUTableViewSection *)section
+- (void)insertSection:(AMBTableViewSection *)section
               atIndex:(NSUInteger)index;
 
 /// Remove a section.
 /// @param section The section to be removed.
-- (void)removeSection:(NBUTableViewSection *)section;
+- (void)removeSection:(AMBTableViewSection *)section;
 
 /// Remove the section at a given index.
 /// @param index The index of the section to be removed.
@@ -61,18 +61,18 @@
 /// Replace a section for another one.
 /// @param sectionToReplace The section to be replaced.
 /// @param section The replacing section.
-- (void)replaceSection:(NBUTableViewSection *)sectionToReplace
-           withSection:(NBUTableViewSection *)section;
+- (void)replaceSection:(AMBTableViewSection *)sectionToReplace
+           withSection:(AMBTableViewSection *)section;
 
 /// Replace a section at a given index for another one.
 /// @param index The index of the section to be replaced.
 /// @param section The replacing section.
 - (void)replaceSectionAtIndex:(NSUInteger)index
-                  withSection:(NBUTableViewSection *)section;
+                  withSection:(AMBTableViewSection *)section;
 
 /// @name Refreshing the Table View Contents
 
-/// Trigger [NBUTableViewSection update] on all sections.
+/// Trigger [AMBTableViewSection update] on all sections.
 - (void)updateAllSections;
 
 /// @name Convenience Methods
@@ -86,8 +86,8 @@
 - (NSIndexPath *)indexPathForRowWithSubview:(UIView *)subview;
 
 /// Calculate the required height for a dynamic height label.
-/// @param identifier The identifier of the NBUResizableCell who's height will be calculated.
-/// @param text The text that the [NBUResizableCell resizableLabel] should fit.
+/// @param identifier The identifier of the AMBResizableCell who's height will be calculated.
+/// @param text The text that the [AMBResizableCell resizableLabel] should fit.
 /// @param numberOfLines The maximum number of lines to be used by the label or `0` for no limits.
 /// @discussion A cell instance of the given identifier will be cached to calculate the heights
 /// of all future calculations. The original height of the loaded cell will be used as the
@@ -99,19 +99,19 @@
 @end
 
 
-/// @name  NBUTableViewSection Blocks
+/// @name  AMBTableViewSection Blocks
 
 /// A block where any aspect of the section can be changed and rows can set to be shown/hidden,
 /// reloaded, etc.
 /// @param The section to be updated.
-typedef void (^NBUTableViewSectionUpdateBlock) (NBUTableViewSection * section);
+typedef void (^AMBTableViewSectionUpdateBlock) (AMBTableViewSection * section);
 
 /// Calculate the height of the cell corresponding to a given section object.
 /// @param object The object who's corresponing cell needs to be calculated.
 /// @param indexPath The index path of the corresponding cell.
-/// @return The desired height. When there is no [NBUTableViewSection cellHeightBlock] or the
+/// @return The desired height. When there is no [AMBTableViewSection cellHeightBlock] or the
 /// block returns a negative height the default [UITableView rowHeight] is used.
-typedef CGFloat (^NBUTableViewCellHeightBlock) (id object,
+typedef CGFloat (^AMBTableViewCellHeightBlock) (id object,
                                                 NSIndexPath * indexPath);
 
 /// The Prototype Cell identifier that should be loaded for a given object.
@@ -119,15 +119,15 @@ typedef CGFloat (^NBUTableViewCellHeightBlock) (id object,
 /// @param indexPath The index path of the corresponding cell.
 /// @return A Prototype Cell identifier.
 /// @discussion Depending on the kind of object this method may never be called.
-/// @see [NBUTableViewSection objects].
-typedef NSString * (^NBUTableViewCellIdentifierBlock) (id object,
+/// @see [AMBTableViewSection objects].
+typedef NSString * (^AMBTableViewCellIdentifierBlock) (id object,
                                                        NSIndexPath * indexPath);
 
 /// A block used to configure a cell for a given object and index path.
 /// @param object The object who's corresponing cell will be configured.
 /// @param cell The cell to be configured.
 /// @param indexPath The index path of the corresponding cell.
-typedef void (^NBUTableViewCellConfigurationBlock)(id object,
+typedef void (^AMBTableViewCellConfigurationBlock)(id object,
                                                    UITableViewCell * cell,
                                                    NSIndexPath * indexPath);
 
@@ -140,28 +140,28 @@ typedef void (^NBUTableViewCellConfigurationBlock)(id object,
  - An object corresponds to a cell when it is not set to hidden.
  - A non-hidden object gets a cell loaded by a given identifier unless the object is
  already a UITableViewCell.
- - If the object is a NBUCellIdentifier then cellIdentifierBlock is skipped for that cell.
+ - If the object is a AMBCellIdentifier then cellIdentifierBlock is skipped for that cell.
  - When presentsNoContentCell is set to `YES` all blocks are called with a `nil` object.
  - Hidding/showing/inserting/removing objects automatically updates the corresponding table cells.
  
  A section can be set to hidden, in which case it ignores its objects and returns `0` as its numberOfRows.
  */
-@interface NBUTableViewSection : NSObject
+@interface AMBTableViewSection : NSObject
 
 /// @name Creating Sections
 
 /// Create and return a new section.
 /// @param objects An abstract list of objects to be presented by the section.
 /// @param sectionUpdateBlock An optinal block to be called on update on
-/// [NBUTableViewController updateAllSections] calls.
+/// [AMBTableViewController updateAllSections] calls.
 /// @param cellHeightBlock An optional block to be called on [UITableView tableView:heightForRowAtIndexPath:].
 /// @param cellIdentifierBlock The block to be called when a cell needs to be loaded.
 /// @param cellConfigurationBlock An optional block to be called to configure a loaded or reused cell.
 + (instancetype)sectionWithObjects:(NSArray *)objects
-                sectionUpdateBlock:(NBUTableViewSectionUpdateBlock)sectionUpdateBlock
-                   cellHeightBlock:(NBUTableViewCellHeightBlock)cellHeightBlock
-               cellIdentifierBlock:(NBUTableViewCellIdentifierBlock)cellIdentifierBlock
-            cellConfigurationBlock:(NBUTableViewCellConfigurationBlock)cellConfigurationBlock;
+                sectionUpdateBlock:(AMBTableViewSectionUpdateBlock)sectionUpdateBlock
+                   cellHeightBlock:(AMBTableViewCellHeightBlock)cellHeightBlock
+               cellIdentifierBlock:(AMBTableViewCellIdentifierBlock)cellIdentifierBlock
+            cellConfigurationBlock:(AMBTableViewCellConfigurationBlock)cellConfigurationBlock;
 
 /// @name Properties
 
@@ -177,20 +177,20 @@ typedef void (^NBUTableViewCellConfigurationBlock)(id object,
 /// The number of rows that the section returns to [UITableView tableView:numberOfRowsInSection:].
 @property (nonatomic, readonly)         NSUInteger numberOfRows;
 
-/// The NBUTableViewController assigned when the section is added to [NBUTableViewController sections].
-@property (weak, nonatomic)             NBUTableViewController * controller;
+/// The AMBTableViewController assigned when the section is added to [AMBTableViewController sections].
+@property (weak, nonatomic)             AMBTableViewController * controller;
 
-/// An optinal block to be called on update on [NBUTableViewController updateAllSections] calls.
-@property (copy, nonatomic)             NBUTableViewSectionUpdateBlock sectionUpdateBlock;
+/// An optinal block to be called on update on [AMBTableViewController updateAllSections] calls.
+@property (copy, nonatomic)             AMBTableViewSectionUpdateBlock sectionUpdateBlock;
 
 /// An optional block to be called on [UITableView tableView:heightForRowAtIndexPath:].
-@property (copy, nonatomic)             NBUTableViewCellHeightBlock cellHeightBlock;
+@property (copy, nonatomic)             AMBTableViewCellHeightBlock cellHeightBlock;
 
 /// The block to be called when a cell needs to be loaded.
-@property (copy, nonatomic)             NBUTableViewCellIdentifierBlock cellIdentifierBlock;
+@property (copy, nonatomic)             AMBTableViewCellIdentifierBlock cellIdentifierBlock;
 
 /// An optional block to be called to configure a loaded or reused cell.
-@property (copy, nonatomic)             NBUTableViewCellConfigurationBlock cellConfigurationBlock;
+@property (copy, nonatomic)             AMBTableViewCellConfigurationBlock cellConfigurationBlock;
 
 /// @name Managing Objects
 
@@ -327,12 +327,12 @@ typedef void (^NBUTableViewCellConfigurationBlock)(id object,
 
 
 /**
- An object that can be used to populate a [NBUTableViewSection objects] while
+ An object that can be used to populate a [AMBTableViewSection objects] while
  directly specifying the cell to be loaded.
  
  Useful for cells that require little or no configuration besides being loaded.
  */
-@interface NBUCellIdentifier : NSObject
+@interface AMBCellIdentifier : NSObject
 
 /// Create and return a new object.
 /// @param string An existing Prototype Cell identifier.
@@ -346,10 +346,10 @@ typedef void (^NBUTableViewCellConfigurationBlock)(id object,
 
 /**
  A protocol that when implemented by a UITableViewCell enables using
- [NBUTableViewController heightForCellWithIdentifier:text:limitedToNumberOfLines:]
+ [AMBTableViewController heightForCellWithIdentifier:text:limitedToNumberOfLines:]
  to easily calculate dynamic-sized cells.
  */
-@protocol NBUResizableCell <NSObject>
+@protocol AMBResizableCell <NSObject>
 
 /// The label that determines the required height of the cell.
 /// @discussion The original cell height is saved and used as the minimum height to used

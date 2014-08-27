@@ -1,6 +1,6 @@
 //
-//  NBUTableViewController.m
-//  NBUTableViewController
+//  AMBTableViewController.m
+//  AMBTableViewController
 //
 //  Created by Ernesto Rivera on 2014/05/07.
 //  Copyright (c) 2014 CyberAgent Inc.
@@ -18,9 +18,9 @@
 //  limitations under the License.
 //
 
-#import "NBUTableViewController.h"
+#import "AMBTableViewController.h"
 
-@implementation NBUTableViewController
+@implementation AMBTableViewController
 {
     NSMutableArray * _mutableSections;
 }
@@ -49,7 +49,7 @@
 - (void)setSections:(NSArray *)sections
 {
     _mutableSections = [NSMutableArray arrayWithArray:sections];
-    for (NBUTableViewSection * section in sections)
+    for (AMBTableViewSection * section in sections)
     {
         section.controller = self;
     }
@@ -63,7 +63,7 @@
     return _mutableSections;
 }
 
-- (void)insertSection:(NBUTableViewSection *)section
+- (void)insertSection:(AMBTableViewSection *)section
               atIndex:(NSUInteger)index
 {
     NSAssert(index <= self.sections.count, @"Can't insert section at invalid index");
@@ -77,7 +77,7 @@
                   withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
-- (void)removeSection:(NBUTableViewSection *)section
+- (void)removeSection:(AMBTableViewSection *)section
 {
     NSUInteger index = [self.sections indexOfObject:section];
     NSAssert(index != NSNotFound, @"Can't remove inexistent section");
@@ -95,8 +95,8 @@
                   withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
-- (void)replaceSection:(NBUTableViewSection *)sectionToReplace
-           withSection:(NBUTableViewSection *)section
+- (void)replaceSection:(AMBTableViewSection *)sectionToReplace
+           withSection:(AMBTableViewSection *)section
 {
     NSUInteger index = [self.sections indexOfObject:section];
     NSAssert(index != NSNotFound, @"Can't replace inexistent section");
@@ -106,7 +106,7 @@
 }
 
 - (void)replaceSectionAtIndex:(NSUInteger)index
-                  withSection:(NBUTableViewSection *)section
+                  withSection:(AMBTableViewSection *)section
 {
     NSAssert(index < self.sections.count, @"Can't replace section at invalid index");
     
@@ -119,7 +119,7 @@
 
 - (void)updateAllSections
 {
-    for (NBUTableViewSection * section in self.sections)
+    for (AMBTableViewSection * section in self.sections)
     {
         [section update];
     }
@@ -168,9 +168,9 @@
     
     if (!cachedValues)
     {
-        UITableViewCell<NBUResizableCell> * cell = [self.tableView dequeueReusableCellWithIdentifier:identifier];
+        UITableViewCell<AMBResizableCell> * cell = [self.tableView dequeueReusableCellWithIdentifier:identifier];
         
-        NSAssert([cell conformsToProtocol:@protocol(NBUResizableCell)], @"Cell doesn't conform to the NBUResizableCell protocol.");
+        NSAssert([cell conformsToProtocol:@protocol(AMBResizableCell)], @"Cell doesn't conform to the AMBResizableCell protocol.");
         
         minimumHeight = cell.frame.size.height;
         label = cell.resizableLabel;
@@ -216,7 +216,7 @@
 - (NSInteger)tableView:(UITableView *)tableView
  numberOfRowsInSection:(NSInteger)sectionIndex
 {
-    NBUTableViewSection * section = self.sections[sectionIndex];
+    AMBTableViewSection * section = self.sections[sectionIndex];
     NSUInteger numberOfRows = section.numberOfRows;
     return numberOfRows;
 }
@@ -225,7 +225,7 @@
          cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     // Retrieve the cell identifier
-    NBUTableViewSection * section = self.sections[indexPath.section];
+    AMBTableViewSection * section = self.sections[indexPath.section];
     id object = section.objects.count ? section.visibleObjects[indexPath.row] : nil;
     
     UITableViewCell * cell;
@@ -240,9 +240,9 @@
     else
     {
         NSString * cellIdentifier;
-        if ([object isKindOfClass:[NBUCellIdentifier class]])
+        if ([object isKindOfClass:[AMBCellIdentifier class]])
         {
-            cellIdentifier = ((NBUCellIdentifier *)object).string;
+            cellIdentifier = ((AMBCellIdentifier *)object).string;
         }
         else if (section.cellIdentifierBlock)
         {
@@ -270,7 +270,7 @@
 - (CGFloat)tableView:(UITableView *)tableView
 heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NBUTableViewSection * section = self.sections[indexPath.section];
+    AMBTableViewSection * section = self.sections[indexPath.section];
     id object = section.objects.count ? section.visibleObjects[indexPath.row] : nil;
     if (section.cellHeightBlock)
     {
@@ -284,7 +284,7 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath
 @end
 
 
-@implementation NBUTableViewSection
+@implementation AMBTableViewSection
 {
     NSMutableArray * _mutableObjects;
     NSMutableIndexSet * _hiddenObjectsMutableIndexSet;
@@ -294,12 +294,12 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath
 @dynamic hiddenObjectsIndexSet;
 
 + (instancetype)sectionWithObjects:(NSArray *)objects
-                sectionUpdateBlock:(NBUTableViewSectionUpdateBlock)sectionUpdateBlock
-                   cellHeightBlock:(NBUTableViewCellHeightBlock)cellHeightBlock
-               cellIdentifierBlock:(NBUTableViewCellIdentifierBlock)cellIdentifierBlock
-            cellConfigurationBlock:(NBUTableViewCellConfigurationBlock)cellConfigurationBlock
+                sectionUpdateBlock:(AMBTableViewSectionUpdateBlock)sectionUpdateBlock
+                   cellHeightBlock:(AMBTableViewCellHeightBlock)cellHeightBlock
+               cellIdentifierBlock:(AMBTableViewCellIdentifierBlock)cellIdentifierBlock
+            cellConfigurationBlock:(AMBTableViewCellConfigurationBlock)cellConfigurationBlock
 {
-    NBUTableViewSection * section = [self new];
+    AMBTableViewSection * section = [self new];
     section.objects = objects;
     section.sectionUpdateBlock = sectionUpdateBlock;
     section.cellHeightBlock = cellHeightBlock;
@@ -316,7 +316,7 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath
               0)));                                             // Empty and doesn't present a no content cell
 }
 
-- (NBUTableViewController *)controller
+- (AMBTableViewController *)controller
 {
     if (_controller)
     {
@@ -683,11 +683,11 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath
 @end
 
 
-@implementation NBUCellIdentifier
+@implementation AMBCellIdentifier
 
 + (instancetype)identifierFromString:(NSString *)string
 {
-    NBUCellIdentifier * identifier = [NBUCellIdentifier new];
+    AMBCellIdentifier * identifier = [AMBCellIdentifier new];
     identifier.string = string;
     return identifier;
 }

@@ -2,7 +2,7 @@
 platform :ios, '5.0'
 
 # For regular projects
-#pod 'NBUTableViewController'
+#pod 'AMBTableViewController'
 
 # Optional for dynamic logging
 #pod 'NBULog'
@@ -11,5 +11,5 @@ platform :ios, '5.0'
 #pod 'LumberjackConsole'
 
 # For development
-pod 'NBUTableViewController', :path => '../'
+pod 'AMBTableViewController', :path => '../'
 

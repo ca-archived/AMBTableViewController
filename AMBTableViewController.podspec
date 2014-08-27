@@ -1,12 +1,12 @@
 
 Pod::Spec.new do |s|
 
-    s.name         = "NBUTableViewController"
+    s.name         = "AMBTableViewController"
     s.version      = "1.0.0"
     s.summary      = "Storyboard and Prototype Cells-centric block-based UITableView controller to manage complex layouts."
     s.description  = <<-DESC
                         * Use Storyboards' Prototype Cells to design your cells.
-                        * Separate table code with NBUTableViewSection's.
+                        * Separate table code with AMBTableViewSection's.
                         * Uses blocks instead of delegate calls and avoid having section code separated through multiple methods.
                         * Individual hide/shown, add/remove sections and rows.
                         * Support for dynamic height cells.
