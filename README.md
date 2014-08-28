@@ -14,18 +14,18 @@ _Developed as part of [Pecolly iOS](https://itunes.apple.com/us/app/pecolly-cook
 
 ## Demo
 
-A demo project is [included](Demo) in the repository and can also be tried online [here](https://app.io/OoRIaL).
+A demo project is [included](Demo) in the repository.
 
 ## Features
 
-![Screenshot 1](http://cyberagent.github.io/AMBTableViewController/images/screenshot1.png)　![Screenshot 2](http://cyberagent.github.io/AMBTableViewController/images/screenshot2.png)
-
  - Use Storyboards' Prototype Cells to design your cells.
  - Separate table code with [`AMBTableViewSection`](Source/AMBTableViewController.h#L149)'s.
- - Uses blocks instead of delegate calls and avoid having section code separated through multiple methods.
+ - Use blocks instead of delegate calls and avoid having section code separated through multiple methods.
  - Individual hide/shown, add/remove sections and rows.
  - Support for dynamic height cells.
  - Support for special "No Content Cell"'s for empty sections.
+
+![Screenshot 1](http://cyberagent.github.io/AMBTableViewController/images/screenshot1.png)　![Screenshot 2](http://cyberagent.github.io/AMBTableViewController/images/screenshot2.png)
 
 ## Installation
 
