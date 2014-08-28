@@ -1,0 +1,293 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>AMBTableViewController by CyberAgent</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>AMBTableViewController</h1>
+        <p>Storyboard and Prototype Cells-centric block-based UITableView controller to manage complex layouts.</p>
+
+        <p class="view"><a href="https://github.com/CyberAgent/AMBTableViewController">View the Project on GitHub <small>CyberAgent/AMBTableViewController</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/CyberAgent/AMBTableViewController/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/CyberAgent/AMBTableViewController/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/CyberAgent/AMBTableViewController">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <p><a href="http://cocoadocs.org/docsets/AMBTableViewController/"><img src="https://img.shields.io/cocoapods/p/AMBTableViewController.svg?style=flat" alt="Platform: iOS"></a>
+<a href="http://cocoadocs.org/docsets/AMBTableViewController/"><img src="https://img.shields.io/cocoapods/v/AMBTableViewController.svg?style=flat" alt="Version: 1.0.0"></a>
+<a href="http://cocoadocs.org/docsets/AMBTableViewController/"><img src="https://img.shields.io/cocoapods/l/AMBTableViewController.svg?style=flat" alt="License: Apache 2.0"></a>
+<a href="https://www.versioneye.com/objective-c/AMBTableViewController"><img src="https://www.versioneye.com/objective-c/AMBTableViewController/badge.svg?style=flat" alt="Dependency Status"></a>
+<a href="https://travis-ci.org/CyberAgent/AMBTableViewController"><img src="http://img.shields.io/travis/CyberAgent/AMBTableViewController/master.svg?style=flat" alt="Build Status"></a></p>
+
+<p><em>Developed as part of <a href="https://itunes.apple.com/us/app/pecolly-cooking-community/id544605228?mt=8">Pecolly iOS</a>.</em></p>
+
+<h2>
+<a name="demo" class="anchor" href="#demo"><span class="octicon octicon-link"></span></a>Demo</h2>
+
+<p>A demo project is <a href="Demo">included</a> in the repository.</p>
+
+<h2>
+<a name="features" class="anchor" href="#features"><span class="octicon octicon-link"></span></a>Features</h2>
+
+<p><img src="http://cyberagent.github.io/AMBTableViewController/images/screenshot1.png" alt="Screenshot 1">　<img src="http://cyberagent.github.io/AMBTableViewController/images/screenshot2.png" alt="Screenshot 2"></p>
+
+<ul>
+<li>Use Storyboards' Prototype Cells to design your cells.</li>
+<li>Separate table code with <a href="Source/AMBTableViewController.h#L149"><code>AMBTableViewSection</code></a>'s.</li>
+<li>Uses blocks instead of delegate calls and avoid having section code separated through multiple methods.</li>
+<li>Individual hide/shown, add/remove sections and rows.</li>
+<li>Support for dynamic height cells.</li>
+<li>Support for special "No Content Cell"'s for empty sections.</li>
+</ul><h2>
+<a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h2>
+
+<p>Add the following to your <a href="http://cocoapods.org">CocoaPods</a>' <a href="http://guides.cocoapods.org/syntax/podfile.html">Podfile</a>:</p>
+
+<div class="highlight highlight-ruby"><pre><span class="n">platform</span> <span class="ss">:ios</span><span class="p">,</span> <span class="s1">'5.0'</span>
+
+<span class="n">pod</span> <span class="s1">'AMBTableViewController'</span>
+</pre></div>
+
+<h2>
+<a name="documentation" class="anchor" href="#documentation"><span class="octicon octicon-link"></span></a>Documentation</h2>
+
+<p><a href="http://cocoadocs.org/docsets/AMBTableViewController/">http://cocoadocs.org/docsets/AMBTableViewController/</a></p>
+
+<h2>
+<a name="sample-code" class="anchor" href="#sample-code"><span class="octicon octicon-link"></span></a>Sample Code</h2>
+
+<p>Part of the included <a href="Demo/TableDemo/PEPhotosDetailViewController.m#L24">demo project</a>.</p>
+
+<h3>
+<a name="creating-and-configuring-sections" class="anchor" href="#creating-and-configuring-sections"><span class="octicon octicon-link"></span></a>Creating and configuring sections</h3>
+
+<p>A section with a single "static" cell of custom height:</p>
+
+<div class="highlight highlight-obj-c"><pre><span class="n">footerSection</span> <span class="o">=</span> <span class="p">[</span><span class="n">AMBTableViewSection</span>
+                 <span class="nl">sectionWithObjects</span><span class="p">:</span><span class="l">@[</span><span class="p">[</span><span class="n">AMBCellIdentifier</span> <span class="nl">identifierFromString</span><span class="p">:</span><span class="s">@"footer"</span><span class="p">]</span><span class="l">]</span>
+                 <span class="nl">sectionUpdateBlock</span><span class="p">:</span><span class="nb">NULL</span>
+                 <span class="nl">cellHeightBlock</span><span class="p">:</span><span class="o">^</span><span class="n">CGFloat</span><span class="p">(</span><span class="kt">id</span> <span class="n">object</span><span class="p">,</span> <span class="bp">NSIndexPath</span> <span class="o">*</span> <span class="n">indexPath</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="mf">120.0</span><span class="p">;</span> <span class="p">}</span>
+                 <span class="nl">cellIdentifierBlock</span><span class="p">:</span><span class="nb">NULL</span>
+                 <span class="nl">cellConfigurationBlock</span><span class="p">:</span><span class="nb">NULL</span><span class="p">];</span>
+</pre></div>
+
+<p>A section with a single "static" cell hidden when post is <code>nil</code>:</p>
+
+<div class="highlight highlight-obj-c"><pre><span class="n">writeSection</span> <span class="o">=</span> <span class="p">[</span><span class="n">AMBTableViewSection</span>
+                <span class="nl">sectionWithObjects</span><span class="p">:</span><span class="l">@[</span><span class="p">[</span><span class="n">AMBCellIdentifier</span> <span class="nl">identifierFromString</span><span class="p">:</span><span class="s">@"write_comment"</span><span class="p">]</span><span class="l">]</span>
+                <span class="nl">sectionUpdateBlock</span><span class="p">:</span><span class="o">^</span><span class="p">(</span><span class="n">AMBTableViewSection</span> <span class="o">*</span> <span class="n">section</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="n">section</span><span class="p">.</span><span class="n">hidden</span> <span class="o">=</span> <span class="p">(</span><span class="n">weakSelf</span><span class="p">.</span><span class="n">post</span> <span class="o">==</span> <span class="nb">nil</span><span class="p">);</span>
+                <span class="p">}</span>
+                <span class="nl">cellHeightBlock</span><span class="p">:</span><span class="nb">NULL</span>
+                <span class="nl">cellIdentifierBlock</span><span class="p">:</span><span class="nb">NULL</span>
+                <span class="nl">cellConfigurationBlock</span><span class="p">:</span><span class="nb">NULL</span><span class="p">];</span>
+</pre></div>
+
+<p>A section with a single row of one of two kinds:</p>
+
+<div class="highlight highlight-obj-c"><pre><span class="n">authorSection</span> <span class="o">=</span> <span class="p">[</span><span class="n">AMBTableViewSection</span>
+                 <span class="nl">sectionWithObjects</span><span class="p">:</span><span class="l">@[</span><span class="s">@"author_cell"</span><span class="l">]</span>
+                 <span class="nl">sectionUpdateBlock</span><span class="p">:</span><span class="o">^</span><span class="p">(</span><span class="n">AMBTableViewSection</span> <span class="o">*</span> <span class="n">section</span><span class="p">)</span>
+                 <span class="p">{</span>
+                     <span class="p">[</span><span class="n">section</span> <span class="nl">reloadObjectAtIndex</span><span class="p">:</span><span class="mi">0</span><span class="p">];</span>
+                 <span class="p">}</span>
+                 <span class="nl">cellHeightBlock</span><span class="p">:</span><span class="nb">NULL</span>
+                 <span class="nl">cellIdentifierBlock</span><span class="p">:</span><span class="o">^</span><span class="bp">NSString</span> <span class="o">*</span><span class="p">(</span><span class="kt">id</span> <span class="n">object</span><span class="p">,</span> <span class="bp">NSIndexPath</span> <span class="o">*</span><span class="n">indexPath</span><span class="p">)</span>
+                 <span class="p">{</span>
+                     <span class="kt">BOOL</span> <span class="n">ownPost</span> <span class="o">=</span> <span class="p">[</span><span class="n">weakSelf</span><span class="p">.</span><span class="n">post</span><span class="p">.</span><span class="n">authorName</span> <span class="nl">isEqualToString</span><span class="p">:</span><span class="s">@"Me"</span><span class="p">];</span>
+                     <span class="k">return</span> <span class="n">ownPost</span> <span class="o">?</span> <span class="s">@"author_self"</span> <span class="o">:</span> <span class="s">@"author_other"</span><span class="p">;</span>
+                 <span class="p">}</span>
+                 <span class="nl">cellConfigurationBlock</span><span class="p">:</span><span class="o">^</span><span class="p">(</span><span class="kt">id</span> <span class="n">object</span><span class="p">,</span>
+                                          <span class="bp">UITableViewCell</span> <span class="o">*</span> <span class="n">cell</span><span class="p">,</span>
+                                          <span class="bp">NSIndexPath</span> <span class="o">*</span> <span class="n">indexPath</span><span class="p">)</span>
+                 <span class="p">{</span>
+                     <span class="n">PEPhotosDetailAuthorCell</span> <span class="o">*</span> <span class="n">authorCell</span> <span class="o">=</span> <span class="p">(</span><span class="n">PEPhotosDetailAuthorCell</span> <span class="o">*</span><span class="p">)</span><span class="n">cell</span><span class="p">;</span>
+                     <span class="n">authorCell</span><span class="p">.</span><span class="n">authorLabel</span><span class="p">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">weakSelf</span><span class="p">.</span><span class="n">post</span><span class="p">.</span><span class="n">authorName</span><span class="p">;</span>
+                 <span class="p">}],</span>
+</pre></div>
+
+<p>A section with hideable cells:</p>
+
+<div class="highlight highlight-obj-c"><pre><span class="bp">NSArray</span> <span class="o">*</span> <span class="n">sectionObjects</span> <span class="o">=</span> <span class="l">@[</span><span class="p">[</span><span class="n">AMBCellIdentifier</span> <span class="nl">identifierFromString</span><span class="p">:</span><span class="s">@"title"</span><span class="p">],</span>   <span class="c1">// 0</span>
+                             <span class="p">[</span><span class="n">AMBCellIdentifier</span> <span class="nl">identifierFromString</span><span class="p">:</span><span class="s">@"image"</span><span class="p">],</span>   <span class="c1">// 1</span>
+                             <span class="p">[</span><span class="n">AMBCellIdentifier</span> <span class="nl">identifierFromString</span><span class="p">:</span><span class="s">@"tags"</span><span class="p">],</span>    <span class="c1">// 2</span>
+                             <span class="p">[</span><span class="n">AMBCellIdentifier</span> <span class="nl">identifierFromString</span><span class="p">:</span><span class="s">@"recipe"</span><span class="p">]</span><span class="l">]</span><span class="p">;</span> <span class="c1">// 3</span>
+<span class="n">topSection</span> <span class="o">=</span> <span class="p">[</span><span class="n">AMBTableViewSection</span>
+              <span class="nl">sectionWithObjects</span><span class="p">:</span><span class="n">sectionObjects</span>
+              <span class="nl">sectionUpdateBlock</span><span class="p">:</span><span class="o">^</span><span class="p">(</span><span class="n">AMBTableViewSection</span> <span class="o">*</span><span class="n">section</span><span class="p">)</span>
+              <span class="p">{</span>
+                  <span class="p">[</span><span class="n">section</span> <span class="nl">reloadObjectAtIndex</span><span class="p">:</span><span class="mi">0</span><span class="p">];</span>
+              <span class="p">}</span>
+              <span class="nl">cellHeightBlock</span><span class="p">:</span><span class="o">^</span><span class="n">CGFloat</span><span class="p">(</span><span class="kt">id</span> <span class="n">object</span><span class="p">,</span>
+                                       <span class="bp">NSIndexPath</span> <span class="o">*</span> <span class="n">indexPath</span><span class="p">)</span>
+              <span class="p">{</span>
+                  <span class="k">switch</span> <span class="p">([</span><span class="n">sectionObjects</span> <span class="nl">indexOfObject</span><span class="p">:</span><span class="n">object</span><span class="p">])</span> <span class="c1">// Shouldn't use indexPath.row because we hide/show rows</span>
+                  <span class="p">{</span>
+                      <span class="k">case</span> <span class="mi">0</span><span class="o">:</span>
+                          <span class="k">return</span> <span class="mf">40.0</span><span class="p">;</span>
+                      <span class="k">case</span> <span class="mi">1</span><span class="o">:</span>
+                          <span class="k">return</span> <span class="mf">160.0</span><span class="p">;</span>
+                      <span class="k">case</span> <span class="mi">3</span><span class="o">:</span>
+                          <span class="k">return</span> <span class="mf">170.0</span><span class="p">;</span>
+                      <span class="k">default</span><span class="o">:</span>
+                          <span class="k">return</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">;</span> <span class="c1">// Table view's default height</span>
+                  <span class="p">}</span>
+              <span class="p">}</span>
+              <span class="nl">cellIdentifierBlock</span><span class="p">:</span><span class="nb">NULL</span>
+              <span class="nl">cellConfigurationBlock</span><span class="p">:</span><span class="o">^</span><span class="p">(</span><span class="kt">id</span> <span class="n">object</span><span class="p">,</span>
+                                       <span class="bp">UITableViewCell</span> <span class="o">*</span> <span class="n">cell</span><span class="p">,</span>
+                                       <span class="bp">NSIndexPath</span> <span class="o">*</span> <span class="n">indexPath</span><span class="p">)</span>
+              <span class="p">{</span>
+                  <span class="k">switch</span> <span class="p">([</span><span class="n">sectionObjects</span> <span class="nl">indexOfObject</span><span class="p">:</span><span class="n">object</span><span class="p">])</span> <span class="c1">// Shouldn't use indexPath.row because we hide/show rows</span>
+                  <span class="p">{</span>
+                      <span class="k">case</span> <span class="mi">0</span><span class="o">:</span>
+                      <span class="p">{</span>
+                          <span class="n">PEPhotosDetailTitleCell</span> <span class="o">*</span> <span class="n">titleCell</span> <span class="o">=</span> <span class="p">(</span><span class="n">PEPhotosDetailTitleCell</span> <span class="o">*</span><span class="p">)</span><span class="n">cell</span><span class="p">;</span>
+                          <span class="n">titleCell</span><span class="p">.</span><span class="n">titleLabel</span><span class="p">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">weakSelf</span><span class="p">.</span><span class="n">post</span><span class="p">.</span><span class="n">title</span><span class="p">;</span>
+                          <span class="k">break</span><span class="p">;</span>
+                      <span class="p">}</span>
+                      <span class="k">case</span> <span class="mi">1</span><span class="o">:</span>
+                      <span class="p">{</span>
+                          <span class="c1">//PEPhotosDetailImageCell * imageCell = (PEPhotosDetailImageCell *)cell;</span>
+                          <span class="k">break</span><span class="p">;</span>
+                      <span class="p">}</span>
+                  <span class="p">}</span>
+              <span class="p">}];</span>
+
+<span class="c1">// Initial state</span>
+<span class="p">[</span><span class="n">topSection</span> <span class="nl">setObjectsAtIndexes</span><span class="p">:[</span><span class="bp">NSIndexSet</span> <span class="nl">indexSetWithIndexesInRange</span><span class="p">:</span><span class="n">NSMakeRange</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)]</span>
+                         <span class="nl">hidden</span><span class="p">:</span><span class="nb">YES</span><span class="p">];</span>
+</pre></div>
+
+<p>A section with a dynamic number of cells of dynamic height and a special "no content cell":</p>
+
+<div class="highlight highlight-obj-c"><pre><span class="n">commentsSection</span> <span class="o">=</span> <span class="p">[</span><span class="n">AMBTableViewSection</span>
+                   <span class="nl">sectionWithObjects</span><span class="p">:</span><span class="l">@[</span><span class="p">[</span><span class="n">AMBCellIdentifier</span> <span class="nl">identifierFromString</span><span class="p">:</span><span class="s">@"loading_comments"</span><span class="p">]</span><span class="l">]</span>
+                   <span class="nl">sectionUpdateBlock</span><span class="p">:</span><span class="nb">NULL</span>
+                   <span class="nl">cellHeightBlock</span><span class="p">:</span><span class="o">^</span><span class="n">CGFloat</span><span class="p">(</span><span class="kt">id</span> <span class="n">object</span><span class="p">,</span>
+                                            <span class="bp">NSIndexPath</span> <span class="o">*</span> <span class="n">indexPath</span><span class="p">)</span>
+                   <span class="p">{</span>
+                       <span class="k">if</span> <span class="p">([</span><span class="n">object</span> <span class="nl">isKindOfClass</span><span class="p">:[</span><span class="n">AMBCellIdentifier</span> <span class="k">class</span><span class="p">]])</span>
+                       <span class="p">{</span>
+                           <span class="k">return</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">;</span> <span class="c1">// Loading comments (default height)</span>
+                       <span class="p">}</span>
+                       <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">object</span><span class="p">)</span>
+                       <span class="p">{</span>
+                           <span class="k">return</span> <span class="mf">88.0</span><span class="p">;</span> <span class="c1">// No content cell</span>
+                       <span class="p">}</span>
+
+                       <span class="c1">// Dynamic height comments</span>
+                       <span class="k">return</span> <span class="p">[</span><span class="n">weakSelf</span> <span class="nl">heightForCellWithIdentifier</span><span class="p">:</span><span class="s">@"comment"</span>
+                                                               <span class="nl">text</span><span class="p">:</span><span class="n">object</span>
+                                             <span class="nl">limitedToNumberOfLines</span><span class="p">:</span><span class="mi">0</span><span class="p">];</span>
+                   <span class="p">}</span>
+                   <span class="nl">cellIdentifierBlock</span><span class="p">:</span><span class="o">^</span><span class="bp">NSString</span> <span class="o">*</span><span class="p">(</span><span class="kt">id</span> <span class="n">object</span><span class="p">,</span>
+                                                   <span class="bp">NSIndexPath</span> <span class="o">*</span> <span class="n">indexPath</span><span class="p">)</span>
+                   <span class="p">{</span>
+                       <span class="k">return</span> <span class="p">(</span><span class="n">object</span> <span class="o">?</span> <span class="s">@"comment"</span> <span class="o">:</span> <span class="c1">// A comment</span>
+                               <span class="s">@"no_comments"</span><span class="p">);</span>      <span class="c1">// No content cell</span>
+                   <span class="p">}</span>
+                   <span class="nl">cellConfigurationBlock</span><span class="p">:</span><span class="o">^</span><span class="p">(</span><span class="kt">id</span> <span class="n">object</span><span class="p">,</span>
+                                            <span class="bp">UITableViewCell</span> <span class="o">*</span> <span class="n">cell</span><span class="p">,</span>
+                                            <span class="bp">NSIndexPath</span> <span class="o">*</span> <span class="n">indexPath</span><span class="p">)</span>
+                   <span class="p">{</span>
+                       <span class="k">if</span> <span class="p">([</span><span class="n">cell</span> <span class="nl">isKindOfClass</span><span class="p">:[</span><span class="n">PEPhotosDetailCommentCell</span> <span class="k">class</span><span class="p">]]</span> <span class="o">&amp;&amp;</span>
+                           <span class="p">[</span><span class="n">object</span> <span class="nl">isKindOfClass</span><span class="p">:[</span><span class="bp">NSString</span> <span class="k">class</span><span class="p">]])</span>
+                       <span class="p">{</span>
+                           <span class="p">((</span><span class="n">PEPhotosDetailCommentCell</span> <span class="o">*</span><span class="p">)</span><span class="n">cell</span><span class="p">).</span><span class="n">bodyLabel</span><span class="p">.</span><span class="n">text</span> <span class="o">=</span> <span class="p">(</span><span class="bp">NSString</span> <span class="o">*</span><span class="p">)</span><span class="n">object</span><span class="p">;</span>
+                       <span class="p">}</span>
+                   <span class="p">}];</span>
+
+<span class="c1">// Enable "no content cell"</span>
+<span class="n">commentsSection</span><span class="p">.</span><span class="n">presentsNoContentCell</span> <span class="o">=</span> <span class="nb">YES</span><span class="p">;</span>
+</pre></div>
+
+<h3>
+<a name="configuring-the-initial-table-configuration" class="anchor" href="#configuring-the-initial-table-configuration"><span class="octicon octicon-link"></span></a>Configuring the initial table configuration</h3>
+
+<div class="highlight highlight-obj-c"><pre><span class="n">tableViewController</span><span class="p">.</span><span class="n">sections</span> <span class="o">=</span> <span class="l">@[</span><span class="n">topSection</span><span class="p">,</span>
+                                 <span class="n">authorSection</span><span class="p">,</span>
+                                 <span class="n">writeSection</span><span class="p">,</span>
+                                 <span class="n">commentsSection</span><span class="p">,</span>
+                                 <span class="n">footerSection</span><span class="l">]</span><span class="p">;</span>
+</pre></div>
+
+<h3>
+<a name="updating-the-table" class="anchor" href="#updating-the-table"><span class="octicon octicon-link"></span></a>Updating the table</h3>
+
+<p>Updating all sections:</p>
+
+<div class="highlight highlight-obj-c"><pre><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">setPost:</span><span class="p">(</span><span class="n">PEPost</span> <span class="o">*</span><span class="p">)</span><span class="nv">post</span>
+<span class="p">{</span>
+    <span class="n">_post</span> <span class="o">=</span> <span class="n">post</span><span class="p">;</span>
+
+    <span class="p">[</span><span class="nb">self</span> <span class="n">updateAllSections</span><span class="p">];</span>
+<span class="p">}</span>
+</pre></div>
+
+<p>Toggling rows:</p>
+
+<div class="highlight highlight-obj-c"><pre><span class="p">-</span> <span class="p">(</span><span class="kt">IBAction</span><span class="p">)</span><span class="nf">toggleDetails:</span><span class="p">(</span><span class="kt">id</span><span class="p">)</span><span class="nv">sender</span>
+<span class="p">{</span>
+    <span class="c1">// Hide if all hiddeable rows are hidden, show all otherwise</span>
+    <span class="p">[</span><span class="n">topSection</span> <span class="nl">setObjectsAtIndexes</span><span class="p">:[</span><span class="bp">NSIndexSet</span> <span class="nl">indexSetWithIndexesInRange</span><span class="p">:</span><span class="n">NSMakeRange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)]</span>
+                             <span class="nl">hidden</span><span class="p">:(</span><span class="o">!</span><span class="p">[</span><span class="n">topSection</span> <span class="nl">isObjectAtIndexHidden</span><span class="p">:</span><span class="mi">1</span><span class="p">]</span> <span class="o">&amp;&amp;</span>
+                                     <span class="o">!</span><span class="p">[</span><span class="n">topSection</span> <span class="nl">isObjectAtIndexHidden</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span> <span class="o">&amp;&amp;</span>
+                                     <span class="o">!</span><span class="p">[</span><span class="n">topSection</span> <span class="nl">isObjectAtIndexHidden</span><span class="p">:</span><span class="mi">3</span><span class="p">])];</span>
+<span class="p">}</span>
+
+</pre></div>
+
+<h2>
+<a name="license" class="anchor" href="#license"><span class="octicon octicon-link"></span></a>License</h2>
+
+<pre><code>Copyright 2014 CyberAgent Inc.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+</code></pre>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/CyberAgent">CyberAgent</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+              <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-40888254-6");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
+  </body>
+</html>
