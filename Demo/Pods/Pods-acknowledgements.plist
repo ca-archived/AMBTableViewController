@@ -218,7 +218,7 @@
    limitations under the License.
 </string>
 			<key>Title</key>
-			<string>NBUTableViewController</string>
+			<string>AMBTableViewController</string>
 			<key>Type</key>
 			<string>PSGroupSpecifier</string>
 		</dict>

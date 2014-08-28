@@ -6,9 +6,9 @@
 // project.
 
 
-// NBUTableViewController
-#define COCOAPODS_POD_AVAILABLE_NBUTableViewController
-#define COCOAPODS_VERSION_MAJOR_NBUTableViewController 1
-#define COCOAPODS_VERSION_MINOR_NBUTableViewController 0
-#define COCOAPODS_VERSION_PATCH_NBUTableViewController 0
+// AMBTableViewController
+#define COCOAPODS_POD_AVAILABLE_AMBTableViewController
+#define COCOAPODS_VERSION_MAJOR_AMBTableViewController 1
+#define COCOAPODS_VERSION_MINOR_AMBTableViewController 0
+#define COCOAPODS_VERSION_PATCH_AMBTableViewController 0
 

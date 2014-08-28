@@ -1,14 +1,14 @@
 PODS:
-  - NBUTableViewController (1.0.0)
+  - AMBTableViewController (1.0.0)
 
 DEPENDENCIES:
-  - NBUTableViewController (from `../`)
+  - AMBTableViewController (from `../`)
 
 EXTERNAL SOURCES:
-  NBUTableViewController:
+  AMBTableViewController:
     :path: ../
 
 SPEC CHECKSUMS:
-  NBUTableViewController: 96de541c4ad1fd0943357d2ca0396c13a5adb306
+  AMBTableViewController: 4d82d1236dbe445ebafcc0908838c13023dd99f4
 
 COCOAPODS: 0.33.1
