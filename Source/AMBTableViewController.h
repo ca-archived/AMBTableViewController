@@ -77,7 +77,7 @@
 /// Insert section/row animation. By default `UITableViewRowAnimationAutomatic`.
 @property (nonatomic) UITableViewRowAnimation insertAnimation;
 
-/// Insert section/row animation. By default `UITableViewRowAnimationAutomatic`.
+/// Insert section/row animation. By default `UITableViewRowAnimationFade`.
 @property (nonatomic) UITableViewRowAnimation removeAnimation;
 
 /// Execute a block while temporarily overriding reload, insert and remove animations.

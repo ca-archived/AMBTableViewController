@@ -37,7 +37,7 @@
     
     self.reloadAnimation = UITableViewRowAnimationNone;
     self.insertAnimation = UITableViewRowAnimationAutomatic;
-    self.removeAnimation = UITableViewRowAnimationAutomatic;
+    self.removeAnimation = UITableViewRowAnimationFade;
 }
 
 - (NSString *)description
