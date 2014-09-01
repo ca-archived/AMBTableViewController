@@ -80,6 +80,22 @@
 /// Insert section/row animation. By default `UITableViewRowAnimationAutomatic`.
 @property (nonatomic) UITableViewRowAnimation removeAnimation;
 
+/// Execute a block while temporarily overriding reload, insert and remove animations.
+/// @param changes The block to be executed.
+/// @param animation The animation to be used while executing the changes.
+- (void)applyChanges:(void (^)(void))changes
+       withAnimation:(UITableViewRowAnimation)animation;
+
+/// Execute a block while temporarily overriding reload, insert and remove animations.
+/// @param changes The block to be executed.
+/// @param reloadAnimation The animation to be used while reloading sections/rows.
+/// @param insertAnimation The animation to be used while inserting sections/rows.
+/// @param removeAnimation The animation to be used while removing sections/rows.
+- (void)applyChanges:(void (^)(void))changes
+ withReloadAnimation:(UITableViewRowAnimation)reloadAnimation
+     insertAnimation:(UITableViewRowAnimation)insertAnimation
+     removeAnimation:(UITableViewRowAnimation)removeAnimation;
+
 /// @name Convenience Methods
 
 /// Trigger [AMBTableViewSection update] on all sections.

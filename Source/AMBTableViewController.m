@@ -23,6 +23,10 @@
 @implementation AMBTableViewController
 {
     NSMutableArray * _mutableSections;
+    BOOL _useCustomAnimations;
+    UITableViewRowAnimation _customReloadAnimation;
+    UITableViewRowAnimation _customInsertAnimation;
+    UITableViewRowAnimation _customRemoveAnimation;
 }
 
 @dynamic sections;
@@ -126,6 +130,46 @@
     [section reload];
 }
 
+#pragma mark - Configuring animations
+
+- (UITableViewRowAnimation)reloadAnimation
+{
+    return _useCustomAnimations ? _customReloadAnimation : _reloadAnimation;
+}
+
+- (UITableViewRowAnimation)insertAnimation
+{
+    return _useCustomAnimations ? _customInsertAnimation : _insertAnimation;
+}
+
+- (UITableViewRowAnimation)removeAnimation
+{
+    return _useCustomAnimations ? _customRemoveAnimation : _removeAnimation;
+}
+
+- (void)applyChanges:(void (^)(void))changes
+       withAnimation:(UITableViewRowAnimation)animation
+{
+    [self applyChanges:changes
+   withReloadAnimation:animation
+       insertAnimation:animation
+       removeAnimation:animation];
+}
+
+- (void)applyChanges:(void (^)(void))changes
+ withReloadAnimation:(UITableViewRowAnimation)reloadAnimation
+     insertAnimation:(UITableViewRowAnimation)insertAnimation
+     removeAnimation:(UITableViewRowAnimation)removeAnimation
+{
+    _useCustomAnimations = YES;
+    _customReloadAnimation = reloadAnimation;
+    _customInsertAnimation = insertAnimation;
+    _customRemoveAnimation = removeAnimation;
+    
+    changes();
+    
+    _useCustomAnimations = NO;
+}
 
 #pragma mark - Convenience methods
 
