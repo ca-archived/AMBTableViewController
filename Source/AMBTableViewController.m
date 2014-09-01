@@ -117,6 +117,9 @@
     [section reload];
 }
 
+
+#pragma mark - Convenience methods
+
 - (void)updateAllSections
 {
     for (AMBTableViewSection * section in self.sections)
@@ -124,8 +127,6 @@
         [section update];
     }
 }
-
-#pragma mark - Convenience methods
 
 - (void)combineChanges:(void (^)(void))changes
 {

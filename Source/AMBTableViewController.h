@@ -41,7 +41,6 @@
 /// The presented sections.
 @property (strong, nonatomic) NSArray * sections;
 
-
 /// @name Managing Sections
 
 /// Insert a section into the sections array.
@@ -70,12 +69,11 @@
 - (void)replaceSectionAtIndex:(NSUInteger)index
                   withSection:(AMBTableViewSection *)section;
 
-/// @name Refreshing the Table View Contents
+
+/// @name Convenience Methods
 
 /// Trigger [AMBTableViewSection update] on all sections.
 - (void)updateAllSections;
-
-/// @name Convenience Methods
 
 /// Combine several section and row changes between [UITableView beginUpdates] and
 /// [UITableView endUpdates].
