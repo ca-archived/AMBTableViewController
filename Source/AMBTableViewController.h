@@ -69,6 +69,16 @@
 - (void)replaceSectionAtIndex:(NSUInteger)index
                   withSection:(AMBTableViewSection *)section;
 
+/// @name Configuring Animations
+
+/// Reload section/row animation. By default `UITableViewRowAnimationNone`.
+@property (nonatomic) UITableViewRowAnimation reloadAnimation;
+
+/// Insert section/row animation. By default `UITableViewRowAnimationAutomatic`.
+@property (nonatomic) UITableViewRowAnimation insertAnimation;
+
+/// Insert section/row animation. By default `UITableViewRowAnimationAutomatic`.
+@property (nonatomic) UITableViewRowAnimation removeAnimation;
 
 /// @name Convenience Methods
 

@@ -27,6 +27,15 @@
 
 @dynamic sections;
 
+- (void)awakeFromNib
+{
+    [super awakeFromNib];
+    
+    self.reloadAnimation = UITableViewRowAnimationNone;
+    self.insertAnimation = UITableViewRowAnimationAutomatic;
+    self.removeAnimation = UITableViewRowAnimationAutomatic;
+}
+
 - (NSString *)description
 {
     return [[[[[NSString stringWithFormat:@"<%@: %p; sections: %@>", NSStringFromClass(self.class), self, self.sections]
@@ -74,7 +83,7 @@
     [section update];
     
     [self.tableView insertSections:[NSIndexSet indexSetWithIndex:index]
-                  withRowAnimation:UITableViewRowAnimationAutomatic];
+                  withRowAnimation:self.insertAnimation];
 }
 
 - (void)removeSection:(AMBTableViewSection *)section
@@ -92,7 +101,7 @@
     [_mutableSections removeObjectAtIndex:index];
     
     [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:index]
-                  withRowAnimation:UITableViewRowAnimationAutomatic];
+                  withRowAnimation:self.removeAnimation];
 }
 
 - (void)replaceSection:(AMBTableViewSection *)sectionToReplace
@@ -542,7 +551,7 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath
     {
         NSUInteger sectionIndex = [self.controller.sections indexOfObject:self];
         [self.controller.tableView reloadSections:[NSIndexSet indexSetWithIndex:sectionIndex]
-                                 withRowAnimation:UITableViewRowAnimationNone];
+                                 withRowAnimation:self.controller.reloadAnimation];
     }
 }
 
@@ -573,7 +582,7 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath
         {
             NSArray * pathsToReload = [self indexPathsForRowIndexes:[self rowIndexSetForVisibleObjectsInIndexSet:visibleObjectIndexesToReload]];
             [self.controller.tableView reloadRowsAtIndexPaths:pathsToReload
-                                             withRowAnimation:UITableViewRowAnimationNone];
+                                             withRowAnimation:self.controller.reloadAnimation];
         }
     }
 }
@@ -630,7 +639,7 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath
     if (self.controller.tableView)
     {
         [self.controller.tableView insertRowsAtIndexPaths:[self indexPathsForRowIndexes:rowIndexSet]
-                                         withRowAnimation:UITableViewRowAnimationFade];
+                                         withRowAnimation:self.controller.insertAnimation];
     }
 }
 
@@ -639,7 +648,7 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath
     if (self.controller.tableView)
     {
         [self.controller.tableView deleteRowsAtIndexPaths:[self indexPathsForRowIndexes:rowIndexSet]
-                                         withRowAnimation:UITableViewRowAnimationFade];
+                                         withRowAnimation:self.controller.removeAnimation];
     }
 }
 
