@@ -301,7 +301,7 @@ typedef void (^AMBTableViewCellConfigurationBlock)(id object,
 - (void)update;
 
 /// Force the table view to fully reload the section.
-/// @note Prefer using using sectionUpdateBlock and calling update.
+/// @note Prefer setting sectionUpdateBlock and calling update when possible.
 - (void)reload;
 
 /// @name Update and Reload Specific Objects
