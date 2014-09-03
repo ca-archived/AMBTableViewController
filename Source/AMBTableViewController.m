@@ -183,17 +183,11 @@
 
 - (void)combineChanges:(void (^)(void))changes
 {
-    if (self.tableView)
-    {
-        [self.tableView beginUpdates];
-    }
+    [self.tableView beginUpdates];
     
     changes();
     
-    if (self.tableView)
-    {
-        [self.tableView endUpdates];
-    }
+    [self.tableView endUpdates];
 }
 
 - (NSIndexPath *)indexPathForRowWithSubview:(UIView *)subview
@@ -413,7 +407,7 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath
     _hiddenObjectsMutableIndexSet = [NSMutableIndexSet indexSet];
     [self updateVisibleObjects];
     
-    // Update table view
+    // Reload section
     [self reload];
 }
 
@@ -682,7 +676,8 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (self.controller.tableView)
     {
-        [self.controller.tableView insertRowsAtIndexPaths:[self indexPathsForRowIndexes:rowIndexSet]
+        NSArray * indexPaths = [self indexPathsForRowIndexes:rowIndexSet];
+        [self.controller.tableView insertRowsAtIndexPaths:indexPaths
                                          withRowAnimation:self.controller.insertAnimation];
     }
 }
@@ -691,7 +686,8 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (self.controller.tableView)
     {
-        [self.controller.tableView deleteRowsAtIndexPaths:[self indexPathsForRowIndexes:rowIndexSet]
+        NSArray * indexPaths = [self indexPathsForRowIndexes:rowIndexSet];
+        [self.controller.tableView deleteRowsAtIndexPaths:indexPaths
                                          withRowAnimation:self.controller.removeAnimation];
     }
 }
