@@ -188,6 +188,12 @@
                                 }
                             }];
         
+        // Enable section title
+        _commentsSection.sectionTitleBlock = ^NSString *(AMBTableViewSection * section)
+        {
+            return @"Comments";
+        };
+
         // Enable "no content cell"
         _commentsSection.presentsNoContentCell = YES;
     }
