@@ -329,6 +329,16 @@ heightForRowAtIndexPath:(NSIndexPath *)indexPath
     return self.tableView.rowHeight;
 }
 
+- (NSString *)tableView:(UITableView *)tableView
+titleForHeaderInSection:(NSInteger)sectionIndex
+{
+    AMBTableViewSection * section = self.sections[sectionIndex];
+    if (section.sectionTitleBlock) {
+        return section.sectionTitleBlock(section);
+    }
+    return nil;
+}
+
 @end
 
 

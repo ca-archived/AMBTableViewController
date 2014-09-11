@@ -125,6 +125,11 @@
 
 /// @name  AMBTableViewSection Blocks
 
+/// A block used to return the name of the section.
+/// @param section The section that whose title to return.
+/// @return String to be used for the title of the section
+typedef NSString * (^AMBTableViewSectionTitleBlock)(AMBTableViewSection * section);
+
 /// A block where any aspect of the section can be changed and rows can set to be shown/hidden,
 /// reloaded, etc.
 /// @param The section to be updated.
@@ -203,6 +208,9 @@ typedef void (^AMBTableViewCellConfigurationBlock)(id object,
 
 /// The AMBTableViewController assigned when the section is added to [AMBTableViewController sections].
 @property (weak, nonatomic)             AMBTableViewController * controller;
+
+/// An optional block to be called on [UITableView tableView:titleForHeaderInSection:].
+@property (copy, nonatomic)             AMBTableViewSectionTitleBlock sectionTitleBlock;
 
 /// An optinal block to be called on update on [AMBTableViewController updateAllSections] calls.
 @property (copy, nonatomic)             AMBTableViewSectionUpdateBlock sectionUpdateBlock;
