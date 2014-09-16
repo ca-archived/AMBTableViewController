@@ -103,6 +103,7 @@
 
 /// Combine several section and row changes between [UITableView beginUpdates] and
 /// [UITableView endUpdates].
+/// @param changes The changes to be combined.
 - (void)combineChanges:(void (^)(void))changes;
 
 /// Retrieve the index path of the row containing a given subview.
@@ -235,6 +236,8 @@ typedef void (^AMBTableViewCellConfigurationBlock)(id object,
 /// An index set of all the currently hidden objects.
 @property (strong, nonatomic, readonly) NSIndexSet * hiddenObjectsIndexSet;
 
+/// @name Adding and Removing Objects
+
 /// Add an object to objects.
 /// @param object The object to be added.
 - (void)addObject:(id)object;
@@ -270,6 +273,8 @@ typedef void (^AMBTableViewCellConfigurationBlock)(id object,
 /// Remove several objects at the given indexes.
 /// @param indexSet The indexes of the objects to be removed.
 - (void)removeObjectsAtIndexes:(NSIndexSet *)indexSet;
+
+/// @name Hiding and Showing Objects
 
 /// Whether an object is hidden.
 /// @param object The subject object.
