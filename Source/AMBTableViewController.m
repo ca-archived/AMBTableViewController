@@ -498,7 +498,7 @@ titleForHeaderInSection:(NSInteger)sectionIndex
     [_mutableObjects removeObjectsAtIndexes:indexSet];
     
     // Got empty? Prefer setObjects
-    if (self.objects.count == 0)
+    if (_mutableObjects.count == 0)
     {
         self.objects = nil;
         return;
