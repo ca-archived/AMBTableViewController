@@ -274,6 +274,20 @@ typedef void (^AMBTableViewCellConfigurationBlock)(id object,
 /// @param indexSet The indexes of the objects to be removed.
 - (void)removeObjectsAtIndexes:(NSIndexSet *)indexSet;
 
+/// @name Moving Objects
+
+/// Move an object to a given index.
+/// @param object The object to move.
+/// @param index The index to move the object to.
+- (void)moveObject:(id)object
+           toIndex:(NSUInteger)index;
+
+/// Move an object from a given index to a new one.
+/// @param oldIndex The original object index.
+/// @param index The index to move the object to.
+- (void)moveObjectAtIndex:(NSUInteger)oldIndex
+                  toIndex:(NSUInteger)index;
+
 /// @name Hiding and Showing Objects
 
 /// Whether an object is hidden.

@@ -511,6 +511,42 @@ titleForHeaderInSection:(NSInteger)sectionIndex
     [self deleteRowsWithIndexes:[self rowIndexSetForVisibleObjectsInIndexSet:indexSet]];
 }
 
+- (void)moveObject:(id)object
+           toIndex:(NSUInteger)index
+{
+    [self moveObjectAtIndex:[self.objects indexOfObject:object]
+                    toIndex:index];
+    
+}
+
+- (void)moveObjectAtIndex:(NSUInteger)oldIndex
+                  toIndex:(NSUInteger)index
+{
+    id object = _mutableObjects[oldIndex];
+    [_mutableObjects removeObjectAtIndex:oldIndex];
+    [_mutableObjects insertObject:object
+                          atIndex:index];
+    
+    if ([_hiddenObjectsMutableIndexSet containsIndex:oldIndex])
+    {
+        [_hiddenObjectsMutableIndexSet removeIndex:oldIndex];
+        [_hiddenObjectsMutableIndexSet addIndex:index];
+    }
+    else
+    {
+        [self updateVisibleObjects];
+    }
+    
+    if (self.controller.tableView)
+    {
+        NSUInteger sectionIndex = [self.controller.sections indexOfObject:self];
+        [self.controller.tableView moveRowAtIndexPath:[NSIndexPath indexPathForRow:oldIndex
+                                                                         inSection:sectionIndex]
+                                          toIndexPath:[NSIndexPath indexPathForRow:index
+                                                                         inSection:sectionIndex]];
+    }
+}
+
 - (BOOL)isObjectHidden:(id)object
 {
     return [self isObjectAtIndexHidden:[self.objects indexOfObject:object]];
