@@ -1,5 +1,5 @@
 PODS:
-  - AMBTableViewController (1.0.0)
+  - AMBTableViewController (1.1.0)
 
 DEPENDENCIES:
   - AMBTableViewController (from `../`)
@@ -9,6 +9,6 @@ EXTERNAL SOURCES:
     :path: ../
 
 SPEC CHECKSUMS:
-  AMBTableViewController: 4d82d1236dbe445ebafcc0908838c13023dd99f4
+  AMBTableViewController: f32e552fa844d7f224129112e398e79550856c80
 
-COCOAPODS: 0.33.1
+COCOAPODS: 0.34.1
