@@ -197,9 +197,9 @@
     return [self.tableView indexPathForRowAtPoint:point];
 }
 
-- (CGFloat)heightForCellWithIdentifier:(NSString *)identifier
-                                  text:(NSString *)text
-                limitedToNumberOfLines:(NSInteger)numberOfLines
+- (CGFloat)heightForResizableCellWithIdentifier:(NSString *)identifier
+                                           text:(NSString *)text
+                         limitedToNumberOfLines:(NSInteger)numberOfLines
 {
     static NSMutableDictionary * cache;
     static dispatch_once_t onceToken;
@@ -212,7 +212,7 @@
     NSDictionary * cachedValues = cache[uniqueCellIdenfier];
     CGFloat minimumHeight;
     CGSize sizeDifference;
-    UILabel * label;
+    UIView * resizableView;
     
     if (!cachedValues)
     {
@@ -221,35 +221,51 @@
         NSAssert([cell conformsToProtocol:@protocol(AMBResizableCell)], @"Cell doesn't conform to the AMBResizableCell protocol.");
         
         minimumHeight = cell.frame.size.height;
-        label = cell.resizableLabel;
+        resizableView = cell.resizableView;
         sizeDifference = cell.frame.size;
-        sizeDifference.width -= label.frame.size.width;
-        sizeDifference.height -= label.frame.size.height;
+        sizeDifference.width -= resizableView.frame.size.width;
+        sizeDifference.height -= resizableView.frame.size.height;
         
-        NSAssert(label, @"No resizableLabel set in cell");
+        NSAssert(resizableView, @"No resizableView set in cell");
         
         cachedValues = @{@"minimumHeight"  : @(minimumHeight),
                          @"sizeDifference" : [NSValue valueWithCGSize:sizeDifference],
-                         @"label"          : label};
+                         @"resizableView"  : resizableView};
         cache[uniqueCellIdenfier] = cachedValues;
     }
     else
     {
         minimumHeight = ((NSNumber *)cachedValues[@"minimumHeight"]).floatValue;
         sizeDifference = ((NSNumber *)cachedValues[@"sizeDifference"]).CGSizeValue;
-        label = cachedValues[@"label"];
+        resizableView = cachedValues[@"resizableView"];
     }
     
-    label.text = text;
-    CGRect labelBounds = CGRectMake(0.0,
-                                    0.0,
-                                    self.tableView.frame.size.width - sizeDifference.width,
-                                    CGFLOAT_MAX);
-    CGRect rect = [label textRectForBounds:labelBounds
-                    limitedToNumberOfLines:numberOfLines];
+    CGFloat heightThatFits = 0.0;
+    CGRect frame = CGRectMake(0.0,
+                              0.0,
+                              self.tableView.frame.size.width - sizeDifference.width,
+                              CGFLOAT_MAX);
+    if ([resizableView isKindOfClass:[UILabel class]])
+    {
+        UILabel * resizableLabel = (UILabel *)resizableView;
+        resizableLabel.text = text;
+        heightThatFits = [resizableLabel textRectForBounds:frame
+                                    limitedToNumberOfLines:numberOfLines].size.height;
+    }
+    else if ([resizableView isKindOfClass:[UITextView class]])
+    {
+        UITextView * resizableTextView = (UITextView *)resizableView;
+        resizableTextView.text = text;
+        heightThatFits = [resizableTextView sizeThatFits:frame.size].height;
+        // TODO: Adjust to numberOfLines
+    }
+    else
+    {
+        NSAssert(false, @"The provided resizableView class '%@' is not supported", NSStringFromClass([resizableView class]));
+    }
     
     CGFloat cellSeparatorHeight = (self.tableView.separatorStyle == UITableViewCellSeparatorStyleNone) ? 0.0 : 1.0;
-    return MAX(rect.size.height + sizeDifference.height + cellSeparatorHeight,
+    return MAX(heightThatFits + sizeDifference.height + cellSeparatorHeight,
                minimumHeight);
 }
 

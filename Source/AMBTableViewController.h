@@ -110,16 +110,18 @@
 /// @param subview A subview of the row.
 - (NSIndexPath *)indexPathForRowWithSubview:(UIView *)subview;
 
-/// Calculate the required height for a dynamic height label.
+/// Calculate the required height for a AMBResizableCell.
 /// @param identifier The identifier of the AMBResizableCell who's height will be calculated.
-/// @param text The text that the [AMBResizableCell resizableLabel] should fit.
-/// @param numberOfLines The maximum number of lines to be used by the label or `0` for no limits.
+/// @param text The text that the view should fit.
+/// @param numberOfLines The maximum number of lines to be allowed or `0` for no limits.
+/// Only implemented for UILabel resizableView's.
 /// @discussion A cell instance of the given identifier will be cached to calculate the heights
 /// of all future calculations. The original height of the loaded cell will be used as the
 /// minimum height to be returned by the function.
-- (CGFloat)heightForCellWithIdentifier:(NSString *)identifier
-                                  text:(NSString *)text
-                limitedToNumberOfLines:(NSInteger)numberOfLines;
+/// @note Currently only suport for UILabel and UITextView objects is implemented.
+- (CGFloat)heightForResizableCellWithIdentifier:(NSString *)identifier
+                                           text:(NSString *)text
+                         limitedToNumberOfLines:(NSInteger)numberOfLines;
 
 @end
 
@@ -397,17 +399,18 @@ typedef void (^AMBTableViewCellConfigurationBlock)(id object,
 
 /**
  A protocol that when implemented by a UITableViewCell enables using
- [AMBTableViewController heightForCellWithIdentifier:text:limitedToNumberOfLines:]
+ [AMBTableViewController heightForResizableCellWithIdentifier:text:limitedToNumberOfLines:]
  to easily calculate dynamic-sized cells.
+ @note Currently only suport for UILabel and UITextView objects is implemented.
  */
 @protocol AMBResizableCell <NSObject>
 
 /// The label that determines the required height of the cell.
-/// @discussion The original cell height is saved and used as the minimum height to used
-/// for the cell.
-/// @note The label should be set to use flexible height and automatically grow/shrink
-/// when its parent cell changes adjusts its height.
-@property (weak, nonatomic) IBOutlet UILabel * resizableLabel;
+/// @discussion The original cell height is saved and used as the minimum height
+/// to be used for the cell.
+/// @note The label should be set to use flexible height and automatically
+/// grow/shrink when its parent cell adjusts its height.
+@property (weak, nonatomic) IBOutlet UIView * resizableView;
 
 @end
 

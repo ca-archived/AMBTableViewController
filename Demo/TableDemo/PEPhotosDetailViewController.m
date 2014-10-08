@@ -167,9 +167,9 @@
                                 }
                                 
                                 // Dynamic height comments
-                                return [weakSelf heightForCellWithIdentifier:@"comment"
-                                                                        text:object
-                                                      limitedToNumberOfLines:0];
+                                return [weakSelf heightForResizableCellWithIdentifier:@"comment"
+                                                                                 text:object
+                                                               limitedToNumberOfLines:0];
                             }
                             cellIdentifierBlock:^NSString *(id object,
                                                             NSIndexPath * indexPath)
@@ -193,7 +193,7 @@
         {
             return @"Comments";
         };
-
+        
         // Enable "no content cell"
         _commentsSection.presentsNoContentCell = YES;
     }
@@ -336,7 +336,7 @@
 
 @implementation PEPhotosDetailCommentCell
 
-@synthesize resizableLabel = _resizableLabel;
+@synthesize resizableView = _resizableView;
 
 @end
 
