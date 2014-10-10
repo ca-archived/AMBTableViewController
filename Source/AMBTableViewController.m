@@ -161,14 +161,22 @@
      insertAnimation:(UITableViewRowAnimation)insertAnimation
      removeAnimation:(UITableViewRowAnimation)removeAnimation
 {
-    _useCustomAnimations = YES;
-    _customReloadAnimation = reloadAnimation;
-    _customInsertAnimation = insertAnimation;
-    _customRemoveAnimation = removeAnimation;
-    
-    changes();
-    
-    _useCustomAnimations = NO;
+    if (_useCustomAnimations)
+    {
+        // Override emdded calls
+        changes();
+    }
+    else
+    {
+        _useCustomAnimations = YES;
+        _customReloadAnimation = reloadAnimation;
+        _customInsertAnimation = insertAnimation;
+        _customRemoveAnimation = removeAnimation;
+        
+        changes();
+        
+        _useCustomAnimations = NO;
+    }
 }
 
 #pragma mark - Convenience methods
