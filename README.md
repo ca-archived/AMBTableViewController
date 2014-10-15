@@ -169,9 +169,9 @@ commentsSection = [AMBTableViewSection
                        }
                        
                        // Dynamic height comments
-                       return [weakSelf heightForCellWithIdentifier:@"comment"
-                                                               text:object
-                                             limitedToNumberOfLines:0];
+                       return [weakSelf heightForResizableCellWithIdentifier:@"comment"
+                                                                        text:object
+                                                      limitedToNumberOfLines:0];
                    }
                    cellIdentifierBlock:^NSString *(id object,
                                                    NSIndexPath * indexPath)
