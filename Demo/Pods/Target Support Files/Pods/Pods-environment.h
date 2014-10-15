@@ -9,6 +9,6 @@
 // AMBTableViewController
 #define COCOAPODS_POD_AVAILABLE_AMBTableViewController
 #define COCOAPODS_VERSION_MAJOR_AMBTableViewController 1
-#define COCOAPODS_VERSION_MINOR_AMBTableViewController 1
+#define COCOAPODS_VERSION_MINOR_AMBTableViewController 2
 #define COCOAPODS_VERSION_PATCH_AMBTableViewController 0
 
