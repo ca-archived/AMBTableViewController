@@ -561,14 +561,14 @@ titleForHeaderInSection:(NSInteger)sectionIndex
         [self updateVisibleObjects];
     }
     
-    if (self.controller.tableView)
-    {
-        NSUInteger sectionIndex = [self.controller.sections indexOfObject:self];
-        [self.controller.tableView moveRowAtIndexPath:[NSIndexPath indexPathForRow:oldIndex
-                                                                         inSection:sectionIndex]
-                                          toIndexPath:[NSIndexPath indexPathForRow:index
-                                                                         inSection:sectionIndex]];
-    }
+    if (!self.controller.tableView || self.hidden)
+        return;
+    
+    NSUInteger sectionIndex = [self.controller.sections indexOfObject:self];
+    [self.controller.tableView moveRowAtIndexPath:[NSIndexPath indexPathForRow:oldIndex
+                                                                     inSection:sectionIndex]
+                                      toIndexPath:[NSIndexPath indexPathForRow:index
+                                                                     inSection:sectionIndex]];
 }
 
 - (BOOL)isObjectHidden:(id)object
@@ -680,18 +680,18 @@ titleForHeaderInSection:(NSInteger)sectionIndex
 
 - (void)reloadObjectsAtIndexes:(NSIndexSet *)indexSet
 {
-    if (self.controller.tableView)
+    if (!self.controller.tableView || self.hidden)
+        return;
+    
+    NSMutableIndexSet * visibleObjectIndexesToReload = [NSMutableIndexSet indexSet];
+    [visibleObjectIndexesToReload addIndexes:indexSet];
+    [visibleObjectIndexesToReload removeIndexes:self.hiddenObjectsIndexSet];
+    
+    if (visibleObjectIndexesToReload.count)
     {
-        NSMutableIndexSet * visibleObjectIndexesToReload = [NSMutableIndexSet indexSet];
-        [visibleObjectIndexesToReload addIndexes:indexSet];
-        [visibleObjectIndexesToReload removeIndexes:self.hiddenObjectsIndexSet];
-        
-        if (visibleObjectIndexesToReload.count)
-        {
-            NSArray * pathsToReload = [self indexPathsForRowIndexes:[self rowIndexSetForVisibleObjectsInIndexSet:visibleObjectIndexesToReload]];
-            [self.controller.tableView reloadRowsAtIndexPaths:pathsToReload
-                                             withRowAnimation:self.controller.reloadAnimation];
-        }
+        NSArray * pathsToReload = [self indexPathsForRowIndexes:[self rowIndexSetForVisibleObjectsInIndexSet:visibleObjectIndexesToReload]];
+        [self.controller.tableView reloadRowsAtIndexPaths:pathsToReload
+                                         withRowAnimation:self.controller.reloadAnimation];
     }
 }
 
@@ -726,7 +726,7 @@ titleForHeaderInSection:(NSInteger)sectionIndex
              atScrollPosition:(UITableViewScrollPosition)scrollPosition
                      animated:(BOOL)animated
 {
-    if (!self.controller.tableView)
+    if (!self.controller.tableView || self.hidden)
         return;
     
     NSIndexSet * indexSet = [self rowIndexSetForVisibleObjectsInIndexSet:[NSIndexSet indexSetWithIndex:index]];
@@ -744,22 +744,22 @@ titleForHeaderInSection:(NSInteger)sectionIndex
 
 - (void)insertRowsWithIndexes:(NSIndexSet *)rowIndexSet
 {
-    if (self.controller.tableView)
-    {
-        NSArray * indexPaths = [self indexPathsForRowIndexes:rowIndexSet];
-        [self.controller.tableView insertRowsAtIndexPaths:indexPaths
-                                         withRowAnimation:self.controller.insertAnimation];
-    }
+    if (!self.controller.tableView || self.hidden)
+        return;
+    
+    NSArray * indexPaths = [self indexPathsForRowIndexes:rowIndexSet];
+    [self.controller.tableView insertRowsAtIndexPaths:indexPaths
+                                     withRowAnimation:self.controller.insertAnimation];
 }
 
 - (void)deleteRowsWithIndexes:(NSIndexSet *)rowIndexSet
 {
-    if (self.controller.tableView)
-    {
-        NSArray * indexPaths = [self indexPathsForRowIndexes:rowIndexSet];
-        [self.controller.tableView deleteRowsAtIndexPaths:indexPaths
-                                         withRowAnimation:self.controller.removeAnimation];
-    }
+    if (!self.controller.tableView || self.hidden)
+        return;
+    
+    NSArray * indexPaths = [self indexPathsForRowIndexes:rowIndexSet];
+    [self.controller.tableView deleteRowsAtIndexPaths:indexPaths
+                                     withRowAnimation:self.controller.removeAnimation];
 }
 
 - (NSIndexSet *)indexSetForObjects:(NSArray *)objects
