@@ -1,6 +1,5 @@
-
 [![Platform: iOS](https://img.shields.io/cocoapods/p/AMBTableViewController.svg?style=flat)](http://cocoadocs.org/docsets/AMBTableViewController/)
-[![Version: 1.0.0](https://img.shields.io/cocoapods/v/AMBTableViewController.svg?style=flat)](http://cocoadocs.org/docsets/AMBTableViewController/)
+[![Version: 1.2.1](https://img.shields.io/cocoapods/v/AMBTableViewController.svg?style=flat)](http://cocoadocs.org/docsets/AMBTableViewController/)
 [![License: Apache 2.0](https://img.shields.io/cocoapods/l/AMBTableViewController.svg?style=flat)](http://cocoadocs.org/docsets/AMBTableViewController/)
 [![Dependency Status](https://www.versioneye.com/objective-c/AMBTableViewController/badge.svg?style=flat)](https://www.versioneye.com/objective-c/AMBTableViewController)
 [![Build Status](http://img.shields.io/travis/CyberAgent/AMBTableViewController/master.svg?style=flat)](https://travis-ci.org/CyberAgent/AMBTableViewController)
@@ -164,9 +163,9 @@ commentsSection = [AMBTableViewSection
                        }
                        
                        // Dynamic height comments
-                       return [weakSelf heightForCellWithIdentifier:@"comment"
-                                                               text:object
-                                             limitedToNumberOfLines:0];
+                       return [weakSelf heightForResizableCellWithIdentifier:@"comment"
+                                                                        text:object
+                                                      limitedToNumberOfLines:0];
                    }
                    cellIdentifierBlock:^NSString *(id object,
                                                    NSIndexPath * indexPath)
@@ -228,7 +227,7 @@ Toggling rows:
 
 ## License
 
-    Copyright 2014 CyberAgent Inc.
+    Copyright (c) 2014-2017 CyberAgent Inc.
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -241,4 +240,3 @@ Toggling rows:
     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
     See the License for the specific language governing permissions and
     limitations under the License.
-
