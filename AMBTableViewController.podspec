@@ -2,7 +2,7 @@
 Pod::Spec.new do |s|
 
     s.name         = "AMBTableViewController"
-    s.version      = "1.2.0"
+    s.version      = "1.2.1"
     s.summary      = "Storyboard and Prototype Cells-centric block-based UITableView controller to manage complex layouts."
     s.description  = <<-DESC
                         * Use Storyboards' Prototype Cells to design your cells.

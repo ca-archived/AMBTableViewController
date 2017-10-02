@@ -5,7 +5,7 @@ AMBTableViewController
 Storyboard and Prototype Cells-centric block-based UITableView controller to manage complex layouts.
 
 [![Platform: iOS](https://img.shields.io/cocoapods/p/AMBTableViewController.svg?style=flat)](http://cocoadocs.org/docsets/AMBTableViewController/)
-[![Version: 1.2.0](https://img.shields.io/cocoapods/v/AMBTableViewController.svg?style=flat)](http://cocoadocs.org/docsets/AMBTableViewController/)
+[![Version: 1.2.1](https://img.shields.io/cocoapods/v/AMBTableViewController.svg?style=flat)](http://cocoadocs.org/docsets/AMBTableViewController/)
 [![License: Apache 2.0](https://img.shields.io/cocoapods/l/AMBTableViewController.svg?style=flat)](http://cocoadocs.org/docsets/AMBTableViewController/)
 [![Dependency Status](https://www.versioneye.com/objective-c/AMBTableViewController/badge.svg?style=flat)](https://www.versioneye.com/objective-c/AMBTableViewController)
 [![Build Status](http://img.shields.io/travis/CyberAgent/AMBTableViewController/master.svg?style=flat)](https://travis-ci.org/CyberAgent/AMBTableViewController)
