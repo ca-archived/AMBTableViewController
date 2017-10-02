@@ -3,7 +3,7 @@
 //  TableDemo
 //
 //  Created by Ernesto Rivera on 2014/05/08.
-//  Copyright (c) 2014 CyberAgent Inc.
+//  Copyright (c) 2014-2017 CyberAgent Inc.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
