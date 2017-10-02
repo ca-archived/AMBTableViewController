@@ -135,7 +135,7 @@ typedef NSString * (^AMBTableViewSectionTitleBlock)(AMBTableViewSection * sectio
 
 /// A block where any aspect of the section can be changed and rows can set to be shown/hidden,
 /// reloaded, etc.
-/// @param The section to be updated.
+/// @param section The section to be updated.
 typedef void (^AMBTableViewSectionUpdateBlock) (AMBTableViewSection * section);
 
 /// Calculate the height of the cell corresponding to a given section object.

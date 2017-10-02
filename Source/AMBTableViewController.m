@@ -437,7 +437,7 @@ titleForHeaderInSection:(NSInteger)sectionIndex
 
 - (void)setObjects:(NSArray *)objects
 {
-    _mutableObjects = [NSMutableArray arrayWithArray:objects];
+    _mutableObjects = objects ? [NSMutableArray arrayWithArray:objects] : [NSMutableArray new];
     _hiddenObjectsMutableIndexSet = [NSMutableIndexSet indexSet];
     [self updateVisibleObjects];
     
