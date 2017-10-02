@@ -1,0 +1,8 @@
+title: AMBTableViewController
+description: Storyboard and Prototype Cells-centric block-based UITableView controller to manage complex layouts.
+google_analytics: UA-40888254-6
+show_downloads: true
+theme: jekyll-theme-minimal
+
+gems:
+  - jekyll-mentions
